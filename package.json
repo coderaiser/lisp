@@ -16,8 +16,8 @@
     "url": "git://github.com/coderaiser/lisp.git"
   },
   "keywords": [
-    "map",
-    "array"
+    "lisp",
+    "functional"
   ],
   "author": "coderaiser <mnemonic.enemy@gmail.com> (http://coderaiser.github.io/)",
   "license": "MIT",
