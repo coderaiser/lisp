@@ -1,0 +1,26 @@
+{
+  "name": "lisp",
+  "version": "0.1.0",
+  "description": "simplest lisp implementation",
+  "homepage": "https://github.com/coderaiser/lisp",
+  "authors": [
+    "coderaiser <mnemonic.enemy@gmail.com>"
+  ],
+  "main": "lib/lisp.js",
+  "moduleType": [
+    "globals",
+    "node"
+  ],
+  "keywords": [
+    "map",
+    "array"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

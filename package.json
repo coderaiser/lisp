@@ -1,0 +1,34 @@
+{
+  "name": "lisp",
+  "version": "0.1.0",
+  "description": "simplest lisp implementation",
+  "main": "lib/lisp.js",
+  "scripts": {
+    "test": "tape test/*.js",
+    "bundle": "browserify -r ./lib/lisp.js:lisp -o dist/lisp.js",
+    "build": "npm run 6to5 && npm run bundle && npm run minify",
+    "minify": "minify dist/lisp.js > dist/lisp.min.js",
+    "6to5": "babel -d lib src",
+    "wisdom": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/coderaiser/lisp.git"
+  },
+  "keywords": [
+    "map",
+    "array"
+  ],
+  "author": "coderaiser <mnemonic.enemy@gmail.com> (http://coderaiser.github.io/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/coderaiser/lisp/issues"
+  },
+  "homepage": "https://github.com/coderaiser/lisp",
+  "devDependencies": {
+    "tape": "^4.2.0"
+  },
+  "dependencies": {
+    "squad": "~1.1.1"
+  }
+}
