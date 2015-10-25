@@ -5,7 +5,7 @@
   "main": "lib/lisp.js",
   "scripts": {
     "test": "tape test/*.js",
-    "bundle": "browserify -r ./lib/lisp.js:lisp -o dist/lisp.js",
+    "bundle": "browserify -r ./lib/lisp.js:lisp -s lisp -ng false -o dist/lisp.js",
     "build": "npm run 6to5 && npm run bundle && npm run minify",
     "minify": "minify dist/lisp.js > dist/lisp.min.js",
     "6to5": "babel -d lib src",

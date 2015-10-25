@@ -1,6 +1,6 @@
 # Lisp [![License][LicenseIMGURL]][LicenseURL] [![NPM version][NPMIMGURL]][NPMURL] [![Dependency Status][DependencyStatusIMGURL]][DependencyStatusURL] [![Build Status][BuildStatusIMGURL]][BuildStatusURL]
 
-Simple lisp implementation.
+Simple lisp implementation. Could be used in browser as global `lisp`, `node.js` environment or bundled with help of `browserify`.
 
 ## Install
 
