@@ -22,7 +22,7 @@ lisp('(head 1 2 3)');
 1
 
 lisp('(tail 1 2 3)');
-//returns
+// returns
 [2, 3]
 ```
 
