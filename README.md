@@ -17,6 +17,10 @@ lisp('(+ 1 2 3 4');
 // returns
 10
 
+lisp ('(+ 5 (* 2 2) (/ 4 2))');
+// returns
+11
+
 lisp('(head 1 2 3)');
 // returns
 1

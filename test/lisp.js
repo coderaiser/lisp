@@ -53,7 +53,7 @@
     });
     
     test('nested expressions', t => {
-        const expr = '(+ 2 (+ 8 4 2)';
+        const expr = '(+ 2 (+ 8 4 2))';
         let result = lisp(expr);
         
         t.equal(result, 16, 'return sum');
