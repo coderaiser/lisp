@@ -1,3 +1,14 @@
+2015.11.05, v0.3.0
+
+fix:
+- (calc) list -> arguments
+
+feature:
+- (library) rm wrong implementations of head, tail
+- (travis) node_js 5
+- (package) rm babel
+
+
 2015.11.05, v0.2.0
 
 feature:

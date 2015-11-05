@@ -57,6 +57,9 @@ function Context(scope, parent) {
 
 /* should be exported before require of interpret */
 ;
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i]; return arr2; } else { return Array.from(arr); } }
+
 module.exports = interpretList;
 
 var interpret = require('./interpret');
@@ -115,10 +118,10 @@ function interpretList(input, context) {
 
         checkFunction(fnData.value, fn);
 
-        return fn.call(null, tail(list));
+        return fn.apply(undefined, _toConsumableArray(tail(list)));
     }
 }
-},{"./context":2,"./interpret":4,"head":9,"is-function":11,"tail":21}],4:[function(require,module,exports){
+},{"./context":2,"./interpret":4,"head":9,"is-function":11,"tail":22}],4:[function(require,module,exports){
 'use strict';
 
 (function () {
@@ -148,23 +151,23 @@ function interpretList(input, context) {
 /* browserify could not handle expression in require */
 ;
 module.exports = {
-    head: require('head'),
-    tail: require('tail'),
     print: require('print'),
     '+': require('sum'),
     '-': require('subs'),
     '*': require('multiply'),
     '/': require('divide')
 };
-},{"divide":8,"head":9,"multiply":15,"print":17,"subs":19,"sum":20,"tail":21}],6:[function(require,module,exports){
+},{"divide":8,"multiply":15,"print":17,"subs":20,"sum":21}],6:[function(require,module,exports){
 'use strict';
 
+var reduce = require('./reduce');
+
 module.exports = function (operation) {
-    return function (args) {
-        return args.map(Number).reduce(operation);
+    return function () {
+        return reduce(operation, arguments);
     };
 };
-},{}],7:[function(require,module,exports){
+},{"./reduce":18}],7:[function(require,module,exports){
 'use strict';
 
 var is = require('is');
@@ -227,7 +230,7 @@ var head = require('./head');
 module.exports = function (list) {
   return head(slice(list, -1));
 };
-},{"./head":9,"./slice":18}],15:[function(require,module,exports){
+},{"./head":9,"./slice":19}],15:[function(require,module,exports){
 'use strict';
 
 var calc = require('./calc');
@@ -255,7 +258,7 @@ function partial(fn) {
         return fn.apply(undefined, _toConsumableArray(args));
     };
 }
-},{"./slice":18,"./tail":21}],17:[function(require,module,exports){
+},{"./slice":19,"./tail":22}],17:[function(require,module,exports){
 'use strict';
 
 module.exports = function (x) {
@@ -265,10 +268,16 @@ module.exports = function (x) {
 },{}],18:[function(require,module,exports){
 'use strict';
 
+module.exports = function (fn, array) {
+    return [].reduce.call(array, fn);
+};
+},{}],19:[function(require,module,exports){
+'use strict';
+
 module.exports = function (array, from, to) {
     return [].slice.call(array, from, to);
 };
-},{}],19:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 'use strict';
 
 var calc = require('./calc');
@@ -276,7 +285,7 @@ var calc = require('./calc');
 module.exports = calc(function (a, b) {
   return a - b;
 });
-},{"./calc":6}],20:[function(require,module,exports){
+},{"./calc":6}],21:[function(require,module,exports){
 'use strict';
 
 var calc = require('./calc');
@@ -284,7 +293,7 @@ var calc = require('./calc');
 module.exports = calc(function (a, b) {
   return a + b;
 });
-},{"./calc":6}],21:[function(require,module,exports){
+},{"./calc":6}],22:[function(require,module,exports){
 'use strict';
 
 var slice = require('./slice');
@@ -292,7 +301,7 @@ var slice = require('./slice');
 module.exports = function (list) {
   return slice(list, 1);
 };
-},{"./slice":18}],22:[function(require,module,exports){
+},{"./slice":19}],23:[function(require,module,exports){
 'use strict';
 
 var categorize = require('./categorize');
@@ -325,7 +334,7 @@ function parenthesize(input, list) {
 function check(input) {
     if (!Array.isArray(input)) throw Error('input should be an array!');
 }
-},{"./categorize":1}],23:[function(require,module,exports){
+},{"./categorize":1}],24:[function(require,module,exports){
 'use strict';
 
 var partial = require('partial');
@@ -371,7 +380,7 @@ function generateStr(expression) {
 
     return str;
 }
-},{"is-string":12,"partial":16}],24:[function(require,module,exports){
+},{"is-string":12,"partial":16}],25:[function(require,module,exports){
 (function(global) {
     'use strict';
     
@@ -447,5 +456,5 @@ var checkExpression = partial(checkString, 'expression');
 var lisp = squad(interpret, parenthesize, tokenize, checkExpression);
 
 module.exports = lisp;
-},{"./interpret":4,"./parenthesize":22,"./tokenize":23,"check":7,"partial":16,"squad":24}]},{},[1,2,3,4,5,"lisp",22,23])("lisp")
+},{"./interpret":4,"./parenthesize":23,"./tokenize":24,"check":7,"partial":16,"squad":25}]},{},[1,2,3,4,5,"lisp",23,24])("lisp")
 });
