@@ -62,6 +62,6 @@ function interpretList(input, context) {
         
         checkFunction(fnData.value, fn);
             
-        return fn.call(null, tail(list));
+        return fn(...tail(list));
     }
 }
