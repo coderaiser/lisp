@@ -59,6 +59,61 @@
 },{}],2:[function(require,module,exports){
 'use strict';
 
+let squad       = require('squad');
+
+module.exports  = () => {
+    let openCount   = incMonad();
+    let closeCount  = incMonad();
+    
+    let fn = processParenthese(openCount, closeCount);
+    
+    fn.check = () =>
+        checkMonads(openCount, closeCount);
+    
+    return fn;
+};
+
+let ifCondition = (fn, ideal) => 
+    value =>
+        value !== ideal ?
+            value
+            :
+            fn(value);
+
+let processParenthese       = (openCount, closeCount) => {
+    let ifOpen      = ifCondition(openCount, '(');
+    let ifClose     = ifCondition(closeCount, ')');
+    
+    let addSpaces   = (a) => ` ${ a } `;
+    
+    return squad(addSpaces, ifOpen, ifClose);
+};
+
+let checkMonads         = function(f, g) {
+    if (f() !== g())
+        throw Error(`different count of parentheses: open ${ f() }, close ${ g() }`);
+};
+
+function incMonad() {
+    let i = 0;
+    
+    return value => {
+        var result;
+        
+        if (!value) {
+            result = i;
+        } else {
+            result = value;
+            i++;
+        }
+        
+        return result;
+    };
+}
+
+},{"squad":1}],3:[function(require,module,exports){
+'use strict';
+
 module.exports = categorize;
 
 let head        = require('head');
@@ -98,7 +153,7 @@ function wrapedByQuotes(value) {
             last(value) === '"';
 }
 
-},{"check":8,"head":10,"last":15,"partial":17}],3:[function(require,module,exports){
+},{"check":9,"head":11,"last":16,"partial":18}],4:[function(require,module,exports){
 'use strict';
 
 module.exports = Context;
@@ -119,7 +174,7 @@ function Context(scope, parent) {
     };
 }
 
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 'use strict';
 
 /* should be exported before require of interpret */
@@ -188,7 +243,7 @@ function interpretList(input, context) {
     }
 }
 
-},{"./context":3,"./interpret":5,"head":10,"is-function":12,"tail":23}],5:[function(require,module,exports){
+},{"./context":4,"./interpret":6,"head":11,"is-function":13,"tail":24}],6:[function(require,module,exports){
 (function() {
     'use strict';
     
@@ -215,7 +270,7 @@ function interpretList(input, context) {
     }
 })();
 
-},{"./context":3,"./interpret-list":4,"./library":6,"is-array":11}],6:[function(require,module,exports){
+},{"./context":4,"./interpret-list":5,"./library":7,"is-array":12}],7:[function(require,module,exports){
 'use strict';
 
 /* browserify could not handle expression in require */
@@ -227,7 +282,7 @@ module.exports = {
     '/'     : require('divide')
 };
 
-},{"divide":9,"multiply":16,"print":18,"subs":21,"sum":22}],7:[function(require,module,exports){
+},{"divide":10,"multiply":17,"print":19,"subs":22,"sum":23}],8:[function(require,module,exports){
 'use strict';
 
 let reduce = require('./reduce');
@@ -237,7 +292,7 @@ module.exports = operation =>
         return reduce(operation, arguments);
     };
 
-},{"./reduce":19}],8:[function(require,module,exports){
+},{"./reduce":20}],9:[function(require,module,exports){
 'use strict';
 
 let is = require('is');
@@ -249,24 +304,24 @@ module.exports = (type, name, value) => {
     return value;
 };
 
-},{"is":14}],9:[function(require,module,exports){
+},{"is":15}],10:[function(require,module,exports){
 'use strict';
 
 let calc = require('./calc');
 
 module.exports = calc((a, b) => a / b);
 
-},{"./calc":7}],10:[function(require,module,exports){
+},{"./calc":8}],11:[function(require,module,exports){
 'use strict';
 
 module.exports = list => list[0];
 
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 'use strict';
 
 module.exports = list => Array.isArray(list);
 
-},{}],12:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 'use strict';
 
 let is = require('is');
@@ -274,18 +329,18 @@ let is = require('is');
 module.exports = fn =>
     is('function', fn);
 
-},{"is":14}],13:[function(require,module,exports){
+},{"is":15}],14:[function(require,module,exports){
 'use strict';
 
 let is = require('is');
 
 module.exports = str =>
     is('string', str);
-},{"is":14}],14:[function(require,module,exports){
+},{"is":15}],15:[function(require,module,exports){
 'use strict';
 
 module.exports = (type, value) => typeof value === type;
-},{}],15:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 'use strict';
 
 let slice   = require('./slice');
@@ -293,14 +348,14 @@ let head    = require('./head');
 
 module.exports = list => head(slice(list, -1));
 
-},{"./head":10,"./slice":20}],16:[function(require,module,exports){
+},{"./head":11,"./slice":21}],17:[function(require,module,exports){
 'use strict';
 
 let calc = require('./calc');
 
 module.exports = calc((a, b) => a * b);
 
-},{"./calc":7}],17:[function(require,module,exports){
+},{"./calc":8}],18:[function(require,module,exports){
 'use strict';
 
 let tail    = require('./tail');
@@ -319,7 +374,7 @@ function partial(fn) {
     };
 }
 
-},{"./slice":20,"./tail":23}],18:[function(require,module,exports){
+},{"./slice":21,"./tail":24}],19:[function(require,module,exports){
 'use strict';
 
 module.exports = (x) => {
@@ -327,39 +382,39 @@ module.exports = (x) => {
     return x;
 };
 
-},{}],19:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 'use strict';
 
 module.exports = (fn, array) => 
     [].reduce.call(array, fn);
 
-},{}],20:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 'use strict';
 
 module.exports = (array, from, to) => 
     [].slice.call(array, from, to);
-},{}],21:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 'use strict';
 
 let calc = require('./calc');
 
 module.exports = calc((a, b) => a - b);
 
-},{"./calc":7}],22:[function(require,module,exports){
+},{"./calc":8}],23:[function(require,module,exports){
 'use strict';
 
 let calc = require('./calc');
 
 module.exports = calc((a, b) => a + b);
 
-},{"./calc":7}],23:[function(require,module,exports){
+},{"./calc":8}],24:[function(require,module,exports){
 'use strict';
 
 let slice = require('./slice');
 
 module.exports = list => slice(list, 1);
 
-},{"./slice":20}],24:[function(require,module,exports){
+},{"./slice":21}],25:[function(require,module,exports){
 'use strict';
 
 let categorize = require('./categorize');
@@ -394,11 +449,13 @@ function check(input) {
         throw Error('input should be an array!');
 }
 
-},{"./categorize":2}],25:[function(require,module,exports){
+},{"./categorize":3}],26:[function(require,module,exports){
 'use strict';
 
 let partial     = require('partial');
 let isString    = require('is-string');
+
+let brackets = require('./brackets');
 
 module.exports = tokenize;
 
@@ -419,13 +476,18 @@ function tokenize(expression) {
 }
 
 function spacesInQuotes(marker, x, i) {
+    var roundBrackets = brackets();
+    
+    let str = '';
+    
     if (i % 2 === 0) { // not in string
-        return x
-            .replace(/\(/g, ' ( ')
-            .replace(/\)/g, ' ) ');
+        str =  x.replace(/\(|\)/g, roundBrackets);
+        roundBrackets.check();
     } else { // in string
-        return x.replace(/ /g, marker);
+        str = x.replace(/ /g, marker);
     }
+    
+    return str;
 }
 
 function check(str) {
@@ -446,7 +508,7 @@ function generateStr(expression) {
     return str;
 }
 
-},{"is-string":13,"partial":17}],"lisp":[function(require,module,exports){
+},{"./brackets":2,"is-string":14,"partial":18}],"lisp":[function(require,module,exports){
 'use strict';
 
 let squad           = require('squad');
@@ -465,5 +527,5 @@ let lisp            = squad(interpret, parenthesize, tokenize, checkExpression);
 
 module.exports      = lisp;
 
-},{"./interpret":5,"./parenthesize":24,"./tokenize":25,"check":8,"partial":17,"squad":1}]},{},[2,3,4,5,6,"lisp",24,25])("lisp")
+},{"./interpret":6,"./parenthesize":25,"./tokenize":26,"check":9,"partial":18,"squad":1}]},{},[2,3,4,5,6,7,"lisp",25,26])("lisp")
 });
