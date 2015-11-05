@@ -25,9 +25,7 @@ let processParenthese       = (openCount, closeCount) => {
     let ifOpen      = ifCondition(openCount, '(');
     let ifClose     = ifCondition(closeCount, ')');
     
-    let addSpaces   = (a) => ` ${ a } `;
-    
-    return squad(addSpaces, ifOpen, ifClose);
+    return squad(ifOpen, ifClose);
 };
 
 let checkMonads         = function(f, g) {

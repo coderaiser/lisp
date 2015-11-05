@@ -1,9 +1,13 @@
 'use strict';
 
+let squad       = require('squad');
+
 let partial     = require('partial');
 let isString    = require('is-string');
 
 let brackets = require('./brackets');
+
+let addSpaces   = (a) => ` ${ a } `;
 
 module.exports = tokenize;
 
@@ -24,16 +28,23 @@ function tokenize(expression) {
 }
 
 function spacesInQuotes(marker, x, i) {
-    var roundBrackets = brackets();
+    return i % 2 === 0 ?
+        notInString(x)
+        :
+        inString(marker, x);
+}
+
+function inString(marker, x) {
+    return x.replace(/ /g, marker);
+}
+
+function notInString(x) {
+    let roundBrackets   = brackets();
+    let process         = squad(addSpaces, roundBrackets);
     
-    let str = '';
+    let str =  x.replace(/\(|\)/g, process);
     
-    if (i % 2 === 0) { // not in string
-        str =  x.replace(/\(|\)/g, roundBrackets);
-        roundBrackets.check();
-    } else { // in string
-        str = x.replace(/ /g, marker);
-    }
+    roundBrackets.check();
     
     return str;
 }
