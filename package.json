@@ -29,7 +29,6 @@
   },
   "homepage": "https://github.com/coderaiser/lisp",
   "devDependencies": {
-    "babel": "~6.0.15",
     "babel-cli": "~6.1.1",
     "babel-preset-es2015": "~6.0.15",
     "jscs": "^2.4.0",
