@@ -3,6 +3,8 @@
 let partial     = require('partial');
 let isString    = require('is-string');
 
+let brackets = require('./brackets');
+
 module.exports = tokenize;
 
 function tokenize(expression) {
@@ -22,13 +24,18 @@ function tokenize(expression) {
 }
 
 function spacesInQuotes(marker, x, i) {
+    var roundBrackets = brackets();
+    
+    let str = '';
+    
     if (i % 2 === 0) { // not in string
-        return x
-            .replace(/\(/g, ' ( ')
-            .replace(/\)/g, ' ) ');
+        str =  x.replace(/\(|\)/g, roundBrackets);
+        roundBrackets.check();
     } else { // in string
-        return x.replace(/ /g, marker);
+        str = x.replace(/ /g, marker);
     }
+    
+    return str;
 }
 
 function check(str) {

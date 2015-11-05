@@ -70,4 +70,15 @@
         t.throws(fn, /expression should be string!/, 'should throw when no expression');
         t.end();
     });
+    
+    test('throw: different count of parentheses', t => {
+        const expr = '(+ 2 (+ 8 4 2)';
+        let fn = () => lisp(expr);
+        
+        t.throws(fn, 
+            /different count of parentheses: open 2, close 1/, 
+            'should throw when different count of parentheses');
+        
+        t.end();
+    });
 })();
