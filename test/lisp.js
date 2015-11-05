@@ -36,22 +36,6 @@
         t.end();
     });
     
-    test('expression: head', t => {
-        const expr = '(head 8 4 2)';
-        let result = lisp(expr);
-        
-        t.equal(result, 8, 'return first element');
-        t.end();
-    });
-    
-    test('expression: tail', t => {
-        const expr = '(tail 8 4 2)';
-        let result = lisp(expr);
-        
-        t.deepEqual(result, [4, 2], 'return all but first element');
-        t.end();
-    });
-    
     test('nested expressions', t => {
         const expr = '(+ 2 (+ 8 4 2))';
         let result = lisp(expr);
