@@ -4,6 +4,7 @@ let squad       = require('squad');
 
 let partial     = require('partial');
 let isString    = require('is-string');
+let once        = require('once');
 
 let brackets = require('./brackets');
 
@@ -14,11 +15,20 @@ module.exports = tokenize;
 function tokenize(expression) {
     check(expression);
     
-    let marker = generateStr(expression);
+    let marker          = generateStr(expression);
+    let roundBrackets   = brackets();
+    let strProcess      = squad(addSpaces, roundBrackets);
+    let bracketsCheck   = once(roundBrackets.check);
+    
+    let checkStr        = item => {
+        bracketsCheck();
+        return item;
+    };
     
     return expression
         .split('"')
-        .map(partial(spacesInQuotes, marker))
+        .map(partial(spacesInQuotes, strProcess, marker))
+        .map(checkStr)
         .join('"')
         .split(' ')
         .filter(Boolean)
@@ -27,9 +37,9 @@ function tokenize(expression) {
         );
 }
 
-function spacesInQuotes(marker, x, i) {
+function spacesInQuotes(strProcess, marker, x, i) {
     return i % 2 === 0 ?
-        notInString(x)
+        notInString(strProcess, x)
         :
         inString(marker, x);
 }
@@ -38,13 +48,8 @@ function inString(marker, x) {
     return x.replace(/ /g, marker);
 }
 
-function notInString(x) {
-    let roundBrackets   = brackets();
-    let process         = squad(addSpaces, roundBrackets);
-    
-    let str =  x.replace(/\(|\)/g, process);
-    
-    roundBrackets.check();
+function notInString(strProcess, x) {
+    let str =  x.replace(/\(|\)/g, strProcess);
     
     return str;
 }
@@ -55,7 +60,7 @@ function check(str) {
 }
 
 let uniq            = (expression, str) => ~expression.indexOf(str);
-let generateRandom  = () => `>--- ${ Math.random() } ---<`;
+let generateRandom  = () => `>---${ Math.random() }---<`;
 
 function generateStr(expression) {
     let str;

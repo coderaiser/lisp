@@ -12,6 +12,14 @@
         t.end();
     });
     
+    test('expression: + strings', t => {
+        const expr = '(+ "hello" " world")';
+        let result = lisp(expr);
+        
+        t.equal(result, 'hello world', 'strings concat');
+        t.end();
+    });
+    
     test('expression: *', t => {
         const expr = '(* 1 2 3 4)';
         let result = lisp(expr);
