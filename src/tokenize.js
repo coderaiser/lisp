@@ -14,7 +14,7 @@ module.exports = tokenize;
 function tokenize(expression) {
     check(expression);
     
-    var marker = generateStr(expression);
+    let marker = generateStr(expression);
     
     return expression
         .split('"')
@@ -54,11 +54,11 @@ function check(str) {
         throw Error('expression should be string!');
 }
 
-var uniq            = (expression, str) => ~expression.indexOf(str);
-var generateRandom  = () => `>--- ${ Math.random() } ---<`;
+let uniq            = (expression, str) => ~expression.indexOf(str);
+let generateRandom  = () => `>--- ${ Math.random() } ---<`;
 
 function generateStr(expression) {
-    var str;
+    let str;
     
     do 
         str = generateRandom();
