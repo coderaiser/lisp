@@ -1,3 +1,9 @@
+2015.11.06, v0.3.2
+
+feature:
+- (tokenize) var -> let
+
+
 2015.11.05, v0.3.1
 
 feature:

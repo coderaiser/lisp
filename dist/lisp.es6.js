@@ -84,9 +84,7 @@ let processParenthese       = (openCount, closeCount) => {
     let ifOpen      = ifCondition(openCount, '(');
     let ifClose     = ifCondition(closeCount, ')');
     
-    let addSpaces   = (a) => ` ${ a } `;
-    
-    return squad(addSpaces, ifOpen, ifClose);
+    return squad(ifOpen, ifClose);
 };
 
 let checkMonads         = function(f, g) {
@@ -452,17 +450,21 @@ function check(input) {
 },{"./categorize":3}],26:[function(require,module,exports){
 'use strict';
 
+let squad       = require('squad');
+
 let partial     = require('partial');
 let isString    = require('is-string');
 
 let brackets = require('./brackets');
+
+let addSpaces   = (a) => ` ${ a } `;
 
 module.exports = tokenize;
 
 function tokenize(expression) {
     check(expression);
     
-    var marker = generateStr(expression);
+    let marker = generateStr(expression);
     
     return expression
         .split('"')
@@ -476,16 +478,23 @@ function tokenize(expression) {
 }
 
 function spacesInQuotes(marker, x, i) {
-    var roundBrackets = brackets();
+    return i % 2 === 0 ?
+        notInString(x)
+        :
+        inString(marker, x);
+}
+
+function inString(marker, x) {
+    return x.replace(/ /g, marker);
+}
+
+function notInString(x) {
+    let roundBrackets   = brackets();
+    let process         = squad(addSpaces, roundBrackets);
     
-    let str = '';
+    let str =  x.replace(/\(|\)/g, process);
     
-    if (i % 2 === 0) { // not in string
-        str =  x.replace(/\(|\)/g, roundBrackets);
-        roundBrackets.check();
-    } else { // in string
-        str = x.replace(/ /g, marker);
-    }
+    roundBrackets.check();
     
     return str;
 }
@@ -495,11 +504,11 @@ function check(str) {
         throw Error('expression should be string!');
 }
 
-var uniq            = (expression, str) => ~expression.indexOf(str);
-var generateRandom  = () => `>--- ${ Math.random() } ---<`;
+let uniq            = (expression, str) => ~expression.indexOf(str);
+let generateRandom  = () => `>--- ${ Math.random() } ---<`;
 
 function generateStr(expression) {
-    var str;
+    let str;
     
     do 
         str = generateRandom();
@@ -508,7 +517,7 @@ function generateStr(expression) {
     return str;
 }
 
-},{"./brackets":2,"is-string":14,"partial":18}],"lisp":[function(require,module,exports){
+},{"./brackets":2,"is-string":14,"partial":18,"squad":1}],"lisp":[function(require,module,exports){
 'use strict';
 
 let squad           = require('squad');

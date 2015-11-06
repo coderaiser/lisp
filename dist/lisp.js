@@ -26,11 +26,7 @@ var processParenthese = function processParenthese(openCount, closeCount) {
     var ifOpen = ifCondition(openCount, '(');
     var ifClose = ifCondition(closeCount, ')');
 
-    var addSpaces = function addSpaces(a) {
-        return ' ' + a + ' ';
-    };
-
-    return squad(addSpaces, ifOpen, ifClose);
+    return squad(ifOpen, ifClose);
 };
 
 var checkMonads = function checkMonads(f, g) {
@@ -392,10 +388,16 @@ function check(input) {
 },{"./categorize":2}],25:[function(require,module,exports){
 'use strict';
 
+var squad = require('squad');
+
 var partial = require('partial');
 var isString = require('is-string');
 
 var brackets = require('./brackets');
+
+var addSpaces = function addSpaces(a) {
+    return ' ' + a + ' ';
+};
 
 module.exports = tokenize;
 
@@ -410,18 +412,20 @@ function tokenize(expression) {
 }
 
 function spacesInQuotes(marker, x, i) {
+    return i % 2 === 0 ? notInString(x) : inString(marker, x);
+}
+
+function inString(marker, x) {
+    return x.replace(/ /g, marker);
+}
+
+function notInString(x) {
     var roundBrackets = brackets();
+    var process = squad(addSpaces, roundBrackets);
 
-    var str = '';
+    var str = x.replace(/\(|\)/g, process);
 
-    if (i % 2 === 0) {
-        // not in string
-        str = x.replace(/\(|\)/g, roundBrackets);
-        roundBrackets.check();
-    } else {
-        // in string
-        str = x.replace(/ /g, marker);
-    }
+    roundBrackets.check();
 
     return str;
 }
@@ -438,13 +442,13 @@ var generateRandom = function generateRandom() {
 };
 
 function generateStr(expression) {
-    var str;
+    var str = undefined;
 
     do str = generateRandom(); while (uniq(expression, str));
 
     return str;
 }
-},{"./brackets":1,"is-string":13,"partial":17}],26:[function(require,module,exports){
+},{"./brackets":1,"is-string":13,"partial":17,"squad":26}],26:[function(require,module,exports){
 (function(global) {
     'use strict';
     
