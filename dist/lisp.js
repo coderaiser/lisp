@@ -49,7 +49,7 @@ function incMonad() {
         return result;
     };
 }
-},{"squad":26}],2:[function(require,module,exports){
+},{"squad":27}],2:[function(require,module,exports){
 'use strict';
 
 module.exports = categorize;
@@ -86,7 +86,7 @@ function categorize(input) {
 function wrapedByQuotes(value) {
     return head(value) === '"' && last(value) === '"';
 }
-},{"check":8,"head":10,"last":15,"partial":17}],3:[function(require,module,exports){
+},{"check":8,"head":10,"last":15,"partial":18}],3:[function(require,module,exports){
 'use strict';
 
 module.exports = Context;
@@ -172,7 +172,7 @@ function interpretList(input, context) {
         return fn.apply(undefined, _toConsumableArray(tail(list)));
     }
 }
-},{"./context":3,"./interpret":5,"head":10,"is-function":12,"tail":23}],5:[function(require,module,exports){
+},{"./context":3,"./interpret":5,"head":10,"is-function":12,"tail":24}],5:[function(require,module,exports){
 'use strict';
 
 (function () {
@@ -208,7 +208,7 @@ module.exports = {
     '*': require('multiply'),
     '/': require('divide')
 };
-},{"divide":9,"multiply":16,"print":18,"subs":21,"sum":22}],7:[function(require,module,exports){
+},{"divide":9,"multiply":16,"print":19,"subs":22,"sum":23}],7:[function(require,module,exports){
 'use strict';
 
 var reduce = require('./reduce');
@@ -218,7 +218,7 @@ module.exports = function (operation) {
         return reduce(operation, arguments);
     };
 };
-},{"./reduce":19}],8:[function(require,module,exports){
+},{"./reduce":20}],8:[function(require,module,exports){
 'use strict';
 
 var is = require('is');
@@ -281,7 +281,7 @@ var head = require('./head');
 module.exports = function (list) {
   return head(slice(list, -1));
 };
-},{"./head":10,"./slice":20}],16:[function(require,module,exports){
+},{"./head":10,"./slice":21}],16:[function(require,module,exports){
 'use strict';
 
 var calc = require('./calc');
@@ -290,6 +290,19 @@ module.exports = calc(function (a, b) {
   return a * b;
 });
 },{"./calc":7}],17:[function(require,module,exports){
+'use strict';
+
+module.exports = function (fn) {
+    var done = undefined;
+
+    return function () {
+        if (!done) {
+            done = true;
+            fn.apply(undefined, arguments);
+        }
+    };
+};
+},{}],18:[function(require,module,exports){
 'use strict';
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i]; return arr2; } else { return Array.from(arr); } }
@@ -309,26 +322,26 @@ function partial(fn) {
         return fn.apply(undefined, _toConsumableArray(args));
     };
 }
-},{"./slice":20,"./tail":23}],18:[function(require,module,exports){
+},{"./slice":21,"./tail":24}],19:[function(require,module,exports){
 'use strict';
 
 module.exports = function (x) {
     console.log(x);
     return x;
 };
-},{}],19:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 'use strict';
 
 module.exports = function (fn, array) {
     return [].reduce.call(array, fn);
 };
-},{}],20:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 'use strict';
 
 module.exports = function (array, from, to) {
     return [].slice.call(array, from, to);
 };
-},{}],21:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 'use strict';
 
 var calc = require('./calc');
@@ -336,7 +349,7 @@ var calc = require('./calc');
 module.exports = calc(function (a, b) {
   return a - b;
 });
-},{"./calc":7}],22:[function(require,module,exports){
+},{"./calc":7}],23:[function(require,module,exports){
 'use strict';
 
 var calc = require('./calc');
@@ -344,7 +357,7 @@ var calc = require('./calc');
 module.exports = calc(function (a, b) {
   return a + b;
 });
-},{"./calc":7}],23:[function(require,module,exports){
+},{"./calc":7}],24:[function(require,module,exports){
 'use strict';
 
 var slice = require('./slice');
@@ -352,7 +365,7 @@ var slice = require('./slice');
 module.exports = function (list) {
   return slice(list, 1);
 };
-},{"./slice":20}],24:[function(require,module,exports){
+},{"./slice":21}],25:[function(require,module,exports){
 'use strict';
 
 var categorize = require('./categorize');
@@ -385,13 +398,14 @@ function parenthesize(input, list) {
 function check(input) {
     if (!Array.isArray(input)) throw Error('input should be an array!');
 }
-},{"./categorize":2}],25:[function(require,module,exports){
+},{"./categorize":2}],26:[function(require,module,exports){
 'use strict';
 
 var squad = require('squad');
 
 var partial = require('partial');
 var isString = require('is-string');
+var once = require('once');
 
 var brackets = require('./brackets');
 
@@ -405,27 +419,30 @@ function tokenize(expression) {
     check(expression);
 
     var marker = generateStr(expression);
+    var roundBrackets = brackets();
+    var strProcess = squad(addSpaces, roundBrackets);
+    var bracketsCheck = once(roundBrackets.check);
 
-    return expression.split('"').map(partial(spacesInQuotes, marker)).join('"').split(' ').filter(Boolean).map(function (x) {
+    var checkStr = function checkStr(item) {
+        bracketsCheck();
+        return item;
+    };
+
+    return expression.split('"').map(partial(spacesInQuotes, strProcess, marker)).map(checkStr).join('"').split(' ').filter(Boolean).map(function (x) {
         return x.replace(RegExp(marker, 'g'), ' ');
     });
 }
 
-function spacesInQuotes(marker, x, i) {
-    return i % 2 === 0 ? notInString(x) : inString(marker, x);
+function spacesInQuotes(strProcess, marker, x, i) {
+    return i % 2 === 0 ? notInString(strProcess, x) : inString(marker, x);
 }
 
 function inString(marker, x) {
     return x.replace(/ /g, marker);
 }
 
-function notInString(x) {
-    var roundBrackets = brackets();
-    var process = squad(addSpaces, roundBrackets);
-
-    var str = x.replace(/\(|\)/g, process);
-
-    roundBrackets.check();
+function notInString(strProcess, x) {
+    var str = x.replace(/\(|\)/g, strProcess);
 
     return str;
 }
@@ -438,7 +455,7 @@ var uniq = function uniq(expression, str) {
     return ~expression.indexOf(str);
 };
 var generateRandom = function generateRandom() {
-    return '>--- ' + Math.random() + ' ---<';
+    return '>---' + Math.random() + '---<';
 };
 
 function generateStr(expression) {
@@ -448,7 +465,7 @@ function generateStr(expression) {
 
     return str;
 }
-},{"./brackets":1,"is-string":13,"partial":17,"squad":26}],26:[function(require,module,exports){
+},{"./brackets":1,"is-string":13,"once":17,"partial":18,"squad":27}],27:[function(require,module,exports){
 (function(global) {
     'use strict';
     
@@ -524,5 +541,5 @@ var checkExpression = partial(checkString, 'expression');
 var lisp = squad(interpret, parenthesize, tokenize, checkExpression);
 
 module.exports = lisp;
-},{"./interpret":5,"./parenthesize":24,"./tokenize":25,"check":8,"partial":17,"squad":26}]},{},[1,2,3,4,5,6,"lisp",24,25])("lisp")
+},{"./interpret":5,"./parenthesize":25,"./tokenize":26,"check":8,"partial":18,"squad":27}]},{},[1,2,3,4,5,6,"lisp",25,26])("lisp")
 });
