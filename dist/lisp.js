@@ -509,5 +509,5 @@ var checkExpression = partial(checkString, 'expression');
 var lisp = squad(interpret, parenthesize, bracketsCheck, tokenize, checkExpression);
 
 module.exports = lisp;
-},{"./brackets-check":1,"./interpret":5,"./parenthesize":24,"./tokenize":25,"check":8,"partial":17,"squad":26}]},{},[1,2,3,4,5,6,"lisp",24,25])("lisp")
+},{"./brackets-check":1,"./interpret":5,"./parenthesize":24,"./tokenize":25,"check":8,"partial":17,"squad":26}]},{},["lisp"])("lisp")
 });

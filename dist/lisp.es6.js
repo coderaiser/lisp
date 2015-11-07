@@ -528,5 +528,5 @@ let lisp            = squad(
 
 module.exports      = lisp;
 
-},{"./brackets-check":2,"./interpret":6,"./parenthesize":25,"./tokenize":26,"check":9,"partial":18,"squad":1}]},{},[2,3,4,5,6,7,"lisp",25,26])("lisp")
+},{"./brackets-check":2,"./interpret":6,"./parenthesize":25,"./tokenize":26,"check":9,"partial":18,"squad":1}]},{},["lisp"])("lisp")
 });
