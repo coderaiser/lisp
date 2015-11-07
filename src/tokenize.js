@@ -1,12 +1,7 @@
 'use strict';
 
-let squad       = require('squad');
-
 let partial     = require('partial');
 let isString    = require('is-string');
-let once        = require('once');
-
-let brackets = require('./brackets');
 
 let addSpaces   = (a) => ` ${ a } `;
 
@@ -16,19 +11,10 @@ function tokenize(expression) {
     check(expression);
     
     let marker          = generateStr(expression);
-    let roundBrackets   = brackets();
-    let strProcess      = squad(addSpaces, roundBrackets);
-    let bracketsCheck   = once(roundBrackets.check);
-    
-    let checkStr        = item => {
-        bracketsCheck();
-        return item;
-    };
     
     return expression
         .split('"')
-        .map(partial(spacesInQuotes, strProcess, marker))
-        .map(checkStr)
+        .map(partial(spacesInQuotes, addSpaces, marker))
         .join('"')
         .split(' ')
         .filter(Boolean)
