@@ -5,10 +5,10 @@ module.exports = categorize;
 let head        = require('head');
 let last        = require('last');
 let check       = require('check');
-let partial     = require('partial');
+let apart       = require('apart');
 
-let checkString = partial(check, 'string');
-let checkInput  = partial(checkString, 'input');
+let checkString = apart(check, 'string');
+let checkInput  = apart(checkString, 'input');
 
 function categorize(input) {
     checkInput(input);

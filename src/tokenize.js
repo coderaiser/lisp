@@ -1,6 +1,6 @@
 'use strict';
 
-let partial     = require('partial');
+let apart       = require('apart');
 let isString    = require('is-string');
 
 let addSpaces   = (a) => ` ${ a } `;
@@ -14,7 +14,7 @@ function tokenize(expression) {
     
     return expression
         .split('"')
-        .map(partial(spacesInQuotes, addSpaces, marker))
+        .map(apart(spacesInQuotes, addSpaces, marker))
         .join('"')
         .split(' ')
         .filter(Boolean)

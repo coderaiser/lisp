@@ -7,11 +7,11 @@ let parenthesize    = require('./parenthesize');
 let tokenize        = require('./tokenize');
 let bracketsCheck   = require('./brackets-check');
 
-let partial         = require('partial');
+let apart           = require('apart');
 let check           = require('check');
 
-let checkString     = partial(check, 'string');
-let checkExpression = partial(checkString, 'expression');
+let checkString     = apart(check, 'string');
+let checkExpression = apart(checkString, 'expression');
 
 let lisp            = squad(
     interpret,

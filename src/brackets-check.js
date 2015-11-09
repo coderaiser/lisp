@@ -3,8 +3,8 @@
 let squad       = require('squad');
 
 let is          = require('is');
-let partial     = require('partial');
-let isUndefined = partial(is, 'undefined');
+let apart       = require('apart');
+let isUndefined = apart(is, 'undefined');
 
 module.exports  = tokens => {
     let openCount   = incMonad();
