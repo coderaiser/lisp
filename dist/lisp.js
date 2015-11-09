@@ -4,8 +4,8 @@
 var squad = require('squad');
 
 var is = require('is');
-var partial = require('partial');
-var isUndefined = partial(is, 'undefined');
+var apart = require('apart');
+var isUndefined = apart(is, 'undefined');
 
 module.exports = function (tokens) {
     var openCount = incMonad();
@@ -42,7 +42,7 @@ function incMonad() {
         }
     };
 }
-},{"is":14,"partial":17,"squad":26}],2:[function(require,module,exports){
+},{"apart":25,"is":14,"squad":26}],2:[function(require,module,exports){
 'use strict';
 
 module.exports = categorize;
@@ -50,10 +50,10 @@ module.exports = categorize;
 var head = require('head');
 var last = require('last');
 var check = require('check');
-var partial = require('partial');
+var apart = require('apart');
 
-var checkString = partial(check, 'string');
-var checkInput = partial(checkString, 'input');
+var checkString = apart(check, 'string');
+var checkInput = apart(checkString, 'input');
 
 function categorize(input) {
     checkInput(input);
@@ -79,7 +79,7 @@ function categorize(input) {
 function wrapedByQuotes(value) {
     return head(value) === '"' && last(value) === '"';
 }
-},{"check":8,"head":10,"last":15,"partial":17}],3:[function(require,module,exports){
+},{"apart":25,"check":8,"head":10,"last":15}],3:[function(require,module,exports){
 'use strict';
 
 module.exports = Context;
@@ -165,7 +165,7 @@ function interpretList(input, context) {
         return fn.apply(undefined, _toConsumableArray(tail(list)));
     }
 }
-},{"./context":3,"./interpret":5,"head":10,"is-function":12,"tail":23}],5:[function(require,module,exports){
+},{"./context":3,"./interpret":5,"head":10,"is-function":12,"tail":22}],5:[function(require,module,exports){
 'use strict';
 
 (function () {
@@ -201,7 +201,7 @@ module.exports = {
     '*': require('multiply'),
     '/': require('divide')
 };
-},{"divide":9,"multiply":16,"print":18,"subs":21,"sum":22}],7:[function(require,module,exports){
+},{"divide":9,"multiply":16,"print":17,"subs":20,"sum":21}],7:[function(require,module,exports){
 'use strict';
 
 var reduce = require('./reduce');
@@ -211,7 +211,7 @@ module.exports = function (operation) {
         return reduce(operation, arguments);
     };
 };
-},{"./reduce":19}],8:[function(require,module,exports){
+},{"./reduce":18}],8:[function(require,module,exports){
 'use strict';
 
 var is = require('is');
@@ -274,7 +274,7 @@ var head = require('./head');
 module.exports = function (list) {
   return head(slice(list, -1));
 };
-},{"./head":10,"./slice":20}],16:[function(require,module,exports){
+},{"./head":10,"./slice":19}],16:[function(require,module,exports){
 'use strict';
 
 var calc = require('./calc');
@@ -285,43 +285,23 @@ module.exports = calc(function (a, b) {
 },{"./calc":7}],17:[function(require,module,exports){
 'use strict';
 
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i]; return arr2; } else { return Array.from(arr); } }
-
-var tail = require('./tail');
-var slice = require('./slice');
-
-module.exports = partial;
-
-function partial(fn) {
-    var first = tail(arguments);
-
-    return function () {
-        var last = slice(arguments),
-            args = [].concat(_toConsumableArray(first), _toConsumableArray(last));
-
-        return fn.apply(undefined, _toConsumableArray(args));
-    };
-}
-},{"./slice":20,"./tail":23}],18:[function(require,module,exports){
-'use strict';
-
 module.exports = function (x) {
     console.log(x);
     return x;
 };
-},{}],19:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 'use strict';
 
 module.exports = function (fn, array) {
     return [].reduce.call(array, fn);
 };
-},{}],20:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 'use strict';
 
 module.exports = function (array, from, to) {
     return [].slice.call(array, from, to);
 };
-},{}],21:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 'use strict';
 
 var calc = require('./calc');
@@ -329,7 +309,7 @@ var calc = require('./calc');
 module.exports = calc(function (a, b) {
   return a - b;
 });
-},{"./calc":7}],22:[function(require,module,exports){
+},{"./calc":7}],21:[function(require,module,exports){
 'use strict';
 
 var calc = require('./calc');
@@ -337,7 +317,7 @@ var calc = require('./calc');
 module.exports = calc(function (a, b) {
   return a + b;
 });
-},{"./calc":7}],23:[function(require,module,exports){
+},{"./calc":7}],22:[function(require,module,exports){
 'use strict';
 
 var slice = require('./slice');
@@ -345,7 +325,7 @@ var slice = require('./slice');
 module.exports = function (list) {
   return slice(list, 1);
 };
-},{"./slice":20}],24:[function(require,module,exports){
+},{"./slice":19}],23:[function(require,module,exports){
 'use strict';
 
 var categorize = require('./categorize');
@@ -378,10 +358,10 @@ function parenthesize(input, list) {
 function check(input) {
     if (!Array.isArray(input)) throw Error('input should be an array!');
 }
-},{"./categorize":2}],25:[function(require,module,exports){
+},{"./categorize":2}],24:[function(require,module,exports){
 'use strict';
 
-var partial = require('partial');
+var apart = require('apart');
 var isString = require('is-string');
 
 var addSpaces = function addSpaces(a) {
@@ -395,7 +375,7 @@ function tokenize(expression) {
 
     var marker = generateStr(expression);
 
-    return expression.split('"').map(partial(spacesInQuotes, addSpaces, marker)).join('"').split(' ').filter(Boolean).map(function (x) {
+    return expression.split('"').map(apart(spacesInQuotes, addSpaces, marker)).join('"').split(' ').filter(Boolean).map(function (x) {
         return x.replace(RegExp(marker, 'g'), ' ');
     });
 }
@@ -432,7 +412,37 @@ function generateStr(expression) {
 
     return str;
 }
-},{"is-string":13,"partial":17}],26:[function(require,module,exports){
+},{"apart":25,"is-string":13}],25:[function(require,module,exports){
+'use strict';
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i]; return arr2; } else { return Array.from(arr); } }
+
+var tail = function tail(list) {
+    return slice(list, 1);
+};
+
+module.exports = apart;
+
+function apart(fn) {
+    check(fn);
+
+    var first = tail(arguments);
+
+    return function () {
+        var args = [].concat(_toConsumableArray(first), Array.prototype.slice.call(arguments));
+
+        return fn.apply(undefined, _toConsumableArray(args));
+    };
+}
+
+function slice(list, from, to) {
+    return [].slice.call(list, from, to);
+}
+
+function check(fn) {
+    if (typeof fn !== 'function') throw Error('fn should be function!');
+}
+},{}],26:[function(require,module,exports){
 (function(global) {
     'use strict';
     
@@ -500,14 +510,14 @@ var parenthesize = require('./parenthesize');
 var tokenize = require('./tokenize');
 var bracketsCheck = require('./brackets-check');
 
-var partial = require('partial');
+var apart = require('apart');
 var check = require('check');
 
-var checkString = partial(check, 'string');
-var checkExpression = partial(checkString, 'expression');
+var checkString = apart(check, 'string');
+var checkExpression = apart(checkString, 'expression');
 
 var lisp = squad(interpret, parenthesize, bracketsCheck, tokenize, checkExpression);
 
 module.exports = lisp;
-},{"./brackets-check":1,"./interpret":5,"./parenthesize":24,"./tokenize":25,"check":8,"partial":17,"squad":26}]},{},["lisp"])("lisp")
+},{"./brackets-check":1,"./interpret":5,"./parenthesize":23,"./tokenize":24,"apart":25,"check":8,"squad":26}]},{},["lisp"])("lisp")
 });

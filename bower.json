@@ -1,6 +1,6 @@
 {
   "name": "lisp",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "description": "simplest lisp implementation",
   "homepage": "https://github.com/coderaiser/lisp",
   "authors": [

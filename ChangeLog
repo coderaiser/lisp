@@ -1,3 +1,10 @@
+2015.11.09, v0.4.3
+
+feature:
+- (lisp) partial -> apart
+- (equal) rm
+
+
 2015.11.07, v0.4.2
 
 fix:
