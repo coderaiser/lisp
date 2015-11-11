@@ -84,7 +84,6 @@ function categorize(input) {
 }
 
 function wrapedByQuotes(value) {
-    console.log('>>>', value);
     return head(value) === '"' && last(value) === '"';
 }
 },{"./check":3,"./library":7,"apart":10}],3:[function(require,module,exports){
