@@ -1,9 +1,9 @@
 'use strict';
 
 let squad       = require('squad');
-
-let is          = require('is');
 let apart       = require('apart');
+
+let is          = (type, value) => typeof value === type;
 let isUndefined = apart(is, 'undefined');
 
 module.exports  = tokens => {
