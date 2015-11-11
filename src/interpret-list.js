@@ -5,9 +5,11 @@ module.exports  = interpretList;
 
 let interpret   = require('./interpret');
 let Context     = require('./context');
+let library     = require('./library');
 
-let head        = require('head');
-let tail        = require('tail');
+let head        = library.head;
+let tail        = library.tail;
+
 let isFunction  = fn => typeof fn === 'function';
 
 let special = {

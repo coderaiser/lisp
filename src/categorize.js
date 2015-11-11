@@ -4,9 +4,11 @@ module.exports = categorize;
 
 let apart       = require('apart');
 
-let head        = require('head');
-let last        = require('last');
 let check       = require('./check');
+let library     = require('./library');
+
+let head        = library.head;
+let last        = library.last;
 
 let checkString = apart(check, 'string');
 let checkInput  = apart(checkString, 'input');
@@ -36,6 +38,7 @@ function categorize(input) {
  }
  
 function wrapedByQuotes(value) {
+    console.log('>>>', value)
     return  head(value) === '"' &&
             last(value) === '"';
 }
