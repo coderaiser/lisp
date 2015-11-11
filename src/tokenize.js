@@ -1,8 +1,8 @@
 'use strict';
 
 let apart       = require('apart');
-let isString    = require('is-string');
 
+let isString    = str => typeof str === 'string';
 let addSpaces   = (a) => ` ${ a } `;
 
 module.exports = tokenize;
