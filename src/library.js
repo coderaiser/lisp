@@ -1,10 +1,20 @@
 'use strict';
 
-/* browserify could not handle expression in require */
 module.exports = {
-    print   : require('print'),
-    '+'     : require('sum'),
-    '-'     : require('subs'),
-    '*'     : require('multiply'),
-    '/'     : require('divide')
+    print   : print,
+    '+'     : calc((a, b) => a + b),
+    '-'     : calc((a, b) => a - b),
+    '*'     : calc((a, b) => a * b),
+    '/'     : calc((a, b) => a / b)
 };
+
+function print(x) {
+    console.log(x);
+    return x;
+}
+
+function calc(operation) {
+    return function() {
+        return [].reduce.call(arguments, operation);
+    };
+}
