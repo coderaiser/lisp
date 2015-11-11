@@ -7,7 +7,7 @@
         library         = require('./library'),
         interpretList   = require('./interpret-list');
     
-    let isArray         = require('is-array');
+    let isArray         = Array.isArray;
     
     function interpret(input, context) {
         let result;
