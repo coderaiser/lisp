@@ -38,7 +38,6 @@ function categorize(input) {
  }
  
 function wrapedByQuotes(value) {
-    console.log('>>>', value)
     return  head(value) === '"' &&
             last(value) === '"';
 }
