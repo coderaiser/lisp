@@ -2,10 +2,11 @@
 
 module.exports = categorize;
 
+let apart       = require('apart');
+
 let head        = require('head');
 let last        = require('last');
-let check       = require('check');
-let apart       = require('apart');
+let check       = require('./check');
 
 let checkString = apart(check, 'string');
 let checkInput  = apart(checkString, 'input');
