@@ -1,3 +1,17 @@
+2015.11.11, v0.4.4
+
+feature:
+- (package) main: dist -> lib
+- (library) mv all from node_modules
+- (check) mv ../
+- (library) rm calc, sum, sub, div, multiply
+- (brackets-check) rm is
+- (tokenize) rm is-string
+- (lisp) rm is-function
+- (lisp) rm is-array
+- (lisp) rm partial
+
+
 2015.11.09, v0.4.3
 
 feature:

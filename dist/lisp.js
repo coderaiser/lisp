@@ -1,10 +1,14 @@
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.lisp = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 'use strict';
 
-var squad = require('squad');
+function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
 
-var is = require('is');
+var squad = require('squad');
 var apart = require('apart');
+
+var is = function is(type, value) {
+    return (typeof value === 'undefined' ? 'undefined' : _typeof(value)) === type;
+};
 var isUndefined = apart(is, 'undefined');
 
 module.exports = function (tokens) {
@@ -42,15 +46,18 @@ function incMonad() {
         }
     };
 }
-},{"apart":25,"is":14,"squad":26}],2:[function(require,module,exports){
+},{"apart":10,"squad":11}],2:[function(require,module,exports){
 'use strict';
 
 module.exports = categorize;
 
-var head = require('head');
-var last = require('last');
-var check = require('check');
 var apart = require('apart');
+
+var check = require('./check');
+var library = require('./library');
+
+var head = library.head;
+var last = library.last;
 
 var checkString = apart(check, 'string');
 var checkInput = apart(checkString, 'input');
@@ -77,9 +84,24 @@ function categorize(input) {
 }
 
 function wrapedByQuotes(value) {
+    console.log('>>>', value);
     return head(value) === '"' && last(value) === '"';
 }
-},{"apart":25,"check":8,"head":10,"last":15}],3:[function(require,module,exports){
+},{"./check":3,"./library":7,"apart":10}],3:[function(require,module,exports){
+'use strict';
+
+function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
+
+var is = function is(type, value) {
+    return (typeof value === 'undefined' ? 'undefined' : _typeof(value)) === type;
+};
+
+module.exports = function (type, name, value) {
+    if (!is(type, value)) throw Error(name + ' should be ' + type + '!');
+
+    return value;
+};
+},{}],4:[function(require,module,exports){
 'use strict';
 
 module.exports = Context;
@@ -96,7 +118,7 @@ function Context(scope, parent) {
         return result;
     };
 }
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 'use strict'
 
 /* should be exported before require of interpret */
@@ -108,10 +130,14 @@ module.exports = interpretList;
 
 var interpret = require('./interpret');
 var Context = require('./context');
+var library = require('./library');
 
-var head = require('head');
-var tail = require('tail');
-var isFunction = require('is-function');
+var head = library.head;
+var tail = library.tail;
+
+var isFunction = function isFunction(fn) {
+    return typeof fn === 'function';
+};
 
 var special = {
     let: function _let(input, context) {
@@ -165,7 +191,7 @@ function interpretList(input, context) {
         return fn.apply(undefined, _toConsumableArray(tail(list)));
     }
 }
-},{"./context":3,"./interpret":5,"head":10,"is-function":12,"tail":22}],5:[function(require,module,exports){
+},{"./context":4,"./interpret":6,"./library":7}],6:[function(require,module,exports){
 'use strict';
 
 (function () {
@@ -177,7 +203,7 @@ function interpretList(input, context) {
         library = require('./library'),
         interpretList = require('./interpret-list');
 
-    var isArray = require('is-array');
+    var isArray = Array.isArray;
 
     function interpret(input, context) {
         var result = undefined;
@@ -189,143 +215,55 @@ function interpretList(input, context) {
         return result;
     }
 })();
-},{"./context":3,"./interpret-list":4,"./library":6,"is-array":11}],6:[function(require,module,exports){
-'use strict'
+},{"./context":4,"./interpret-list":5,"./library":7}],7:[function(require,module,exports){
+'use strict';
 
-/* browserify could not handle expression in require */
-;
 module.exports = {
-    print: require('print'),
-    '+': require('sum'),
-    '-': require('subs'),
-    '*': require('multiply'),
-    '/': require('divide')
+    print: print,
+    head: head,
+    tail: tail,
+    last: last,
+    '+': calc(function (a, b) {
+        return a + b;
+    }),
+    '-': calc(function (a, b) {
+        return a - b;
+    }),
+    '*': calc(function (a, b) {
+        return a * b;
+    }),
+    '/': calc(function (a, b) {
+        return a / b;
+    })
 };
-},{"divide":9,"multiply":16,"print":17,"subs":20,"sum":21}],7:[function(require,module,exports){
-'use strict';
 
-var reduce = require('./reduce');
-
-module.exports = function (operation) {
-    return function () {
-        return reduce(operation, arguments);
-    };
-};
-},{"./reduce":18}],8:[function(require,module,exports){
-'use strict';
-
-var is = require('is');
-
-module.exports = function (type, name, value) {
-    if (!is(type, value)) throw Error(name + ' should be ' + type + '!');
-
-    return value;
-};
-},{"is":14}],9:[function(require,module,exports){
-'use strict';
-
-var calc = require('./calc');
-
-module.exports = calc(function (a, b) {
-  return a / b;
-});
-},{"./calc":7}],10:[function(require,module,exports){
-'use strict';
-
-module.exports = function (list) {
-  return list[0];
-};
-},{}],11:[function(require,module,exports){
-'use strict';
-
-module.exports = function (list) {
-  return Array.isArray(list);
-};
-},{}],12:[function(require,module,exports){
-'use strict';
-
-var is = require('is');
-
-module.exports = function (fn) {
-    return is('function', fn);
-};
-},{"is":14}],13:[function(require,module,exports){
-'use strict';
-
-var is = require('is');
-
-module.exports = function (str) {
-    return is('string', str);
-};
-},{"is":14}],14:[function(require,module,exports){
-'use strict';
-
-function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
-
-module.exports = function (type, value) {
-  return (typeof value === 'undefined' ? 'undefined' : _typeof(value)) === type;
-};
-},{}],15:[function(require,module,exports){
-'use strict';
-
-var slice = require('./slice');
-var head = require('./head');
-
-module.exports = function (list) {
-  return head(slice(list, -1));
-};
-},{"./head":10,"./slice":19}],16:[function(require,module,exports){
-'use strict';
-
-var calc = require('./calc');
-
-module.exports = calc(function (a, b) {
-  return a * b;
-});
-},{"./calc":7}],17:[function(require,module,exports){
-'use strict';
-
-module.exports = function (x) {
+function print(x) {
     console.log(x);
     return x;
-};
-},{}],18:[function(require,module,exports){
-'use strict';
+}
 
-module.exports = function (fn, array) {
-    return [].reduce.call(array, fn);
-};
-},{}],19:[function(require,module,exports){
-'use strict';
+function last(list) {
+    return head(slice(list, -1));
+}
 
-module.exports = function (array, from, to) {
+function head(list) {
+    return list[0];
+}
+
+function tail(list) {
+    return slice(list, 1);
+}
+
+function calc(operation) {
+    return function () {
+        return [].reduce.call(arguments, operation);
+    };
+}
+
+function slice(array, from, to) {
     return [].slice.call(array, from, to);
-};
-},{}],20:[function(require,module,exports){
-'use strict';
-
-var calc = require('./calc');
-
-module.exports = calc(function (a, b) {
-  return a - b;
-});
-},{"./calc":7}],21:[function(require,module,exports){
-'use strict';
-
-var calc = require('./calc');
-
-module.exports = calc(function (a, b) {
-  return a + b;
-});
-},{"./calc":7}],22:[function(require,module,exports){
-'use strict';
-
-var slice = require('./slice');
-
-module.exports = function (list) {
-  return slice(list, 1);
-};
-},{"./slice":19}],23:[function(require,module,exports){
+}
+},{}],8:[function(require,module,exports){
 'use strict';
 
 var categorize = require('./categorize');
@@ -358,12 +296,14 @@ function parenthesize(input, list) {
 function check(input) {
     if (!Array.isArray(input)) throw Error('input should be an array!');
 }
-},{"./categorize":2}],24:[function(require,module,exports){
+},{"./categorize":2}],9:[function(require,module,exports){
 'use strict';
 
 var apart = require('apart');
-var isString = require('is-string');
 
+var isString = function isString(str) {
+    return typeof str === 'string';
+};
 var addSpaces = function addSpaces(a) {
     return ' ' + a + ' ';
 };
@@ -412,7 +352,7 @@ function generateStr(expression) {
 
     return str;
 }
-},{"apart":25,"is-string":13}],25:[function(require,module,exports){
+},{"apart":10}],10:[function(require,module,exports){
 'use strict';
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i]; return arr2; } else { return Array.from(arr); } }
@@ -442,7 +382,7 @@ function slice(list, from, to) {
 function check(fn) {
     if (typeof fn !== 'function') throw Error('fn should be function!');
 }
-},{}],26:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 (function(global) {
     'use strict';
     
@@ -504,14 +444,13 @@ function check(fn) {
 'use strict';
 
 var squad = require('squad');
+var apart = require('apart');
 
 var interpret = require('./interpret');
 var parenthesize = require('./parenthesize');
 var tokenize = require('./tokenize');
 var bracketsCheck = require('./brackets-check');
-
-var apart = require('apart');
-var check = require('check');
+var check = require('./check');
 
 var checkString = apart(check, 'string');
 var checkExpression = apart(checkString, 'expression');
@@ -519,5 +458,5 @@ var checkExpression = apart(checkString, 'expression');
 var lisp = squad(interpret, parenthesize, bracketsCheck, tokenize, checkExpression);
 
 module.exports = lisp;
-},{"./brackets-check":1,"./interpret":5,"./parenthesize":23,"./tokenize":24,"apart":25,"check":8,"squad":26}]},{},["lisp"])("lisp")
+},{"./brackets-check":1,"./check":3,"./interpret":6,"./parenthesize":8,"./tokenize":9,"apart":10,"squad":11}]},{},["lisp"])("lisp")
 });

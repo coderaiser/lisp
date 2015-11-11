@@ -90,9 +90,9 @@ function check(fn) {
 'use strict';
 
 let squad       = require('squad');
-
-let is          = require('is');
 let apart       = require('apart');
+
+let is          = (type, value) => typeof value === type;
 let isUndefined = apart(is, 'undefined');
 
 module.exports  = tokens => {
@@ -133,15 +133,18 @@ function incMonad() {
     };
 }
 
-},{"apart":1,"is":16,"squad":2}],4:[function(require,module,exports){
+},{"apart":1,"squad":2}],4:[function(require,module,exports){
 'use strict';
 
 module.exports = categorize;
 
-let head        = require('head');
-let last        = require('last');
-let check       = require('check');
 let apart       = require('apart');
+
+let check       = require('./check');
+let library     = require('./library');
+
+let head        = library.head;
+let last        = library.last;
 
 let checkString = apart(check, 'string');
 let checkInput  = apart(checkString, 'input');
@@ -171,11 +174,24 @@ function categorize(input) {
  }
  
 function wrapedByQuotes(value) {
+    console.log('>>>', value)
     return  head(value) === '"' &&
             last(value) === '"';
 }
 
-},{"apart":1,"check":10,"head":12,"last":17}],5:[function(require,module,exports){
+},{"./check":5,"./library":9,"apart":1}],5:[function(require,module,exports){
+'use strict';
+
+let is = (type, value) => typeof value === type;
+
+module.exports = (type, name, value) => {
+    if (!is(type, value))
+        throw Error(`${ name } should be ${ type }!`);
+    
+    return value;
+};
+
+},{}],6:[function(require,module,exports){
 'use strict';
 
 module.exports = Context;
@@ -196,7 +212,7 @@ function Context(scope, parent) {
     };
 }
 
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 'use strict';
 
 /* should be exported before require of interpret */
@@ -204,10 +220,12 @@ module.exports  = interpretList;
 
 let interpret   = require('./interpret');
 let Context     = require('./context');
+let library     = require('./library');
 
-let head        = require('head');
-let tail        = require('tail');
-let isFunction  = require('is-function');
+let head        = library.head;
+let tail        = library.tail;
+
+let isFunction  = fn => typeof fn === 'function';
 
 let special = {
     let: function(input, context) {
@@ -265,7 +283,7 @@ function interpretList(input, context) {
     }
 }
 
-},{"./context":5,"./interpret":7,"head":12,"is-function":14,"tail":24}],7:[function(require,module,exports){
+},{"./context":6,"./interpret":8,"./library":9}],8:[function(require,module,exports){
 (function() {
     'use strict';
     
@@ -275,7 +293,7 @@ function interpretList(input, context) {
         library         = require('./library'),
         interpretList   = require('./interpret-list');
     
-    let isArray         = require('is-array');
+    let isArray         = Array.isArray;
     
     function interpret(input, context) {
         let result;
@@ -292,133 +310,48 @@ function interpretList(input, context) {
     }
 })();
 
-},{"./context":5,"./interpret-list":6,"./library":8,"is-array":13}],8:[function(require,module,exports){
+},{"./context":6,"./interpret-list":7,"./library":9}],9:[function(require,module,exports){
 'use strict';
 
-/* browserify could not handle expression in require */
 module.exports = {
-    print   : require('print'),
-    '+'     : require('sum'),
-    '-'     : require('subs'),
-    '*'     : require('multiply'),
-    '/'     : require('divide')
+    print   : print,
+    head    : head,
+    tail    : tail,
+    last    : last,
+    '+'     : calc((a, b) => a + b),
+    '-'     : calc((a, b) => a - b),
+    '*'     : calc((a, b) => a * b),
+    '/'     : calc((a, b) => a / b),
 };
 
-},{"divide":11,"multiply":18,"print":19,"subs":22,"sum":23}],9:[function(require,module,exports){
-'use strict';
-
-let reduce = require('./reduce');
-
-module.exports = operation => 
-    function() {
-        return reduce(operation, arguments);
-    };
-
-},{"./reduce":20}],10:[function(require,module,exports){
-'use strict';
-
-let is = require('is');
-
-module.exports = (type, name, value) => {
-    if (!is(type, value))
-        throw Error(`${ name } should be ${ type }!`);
-    
-    return value;
-};
-
-},{"is":16}],11:[function(require,module,exports){
-'use strict';
-
-let calc = require('./calc');
-
-module.exports = calc((a, b) => a / b);
-
-},{"./calc":9}],12:[function(require,module,exports){
-'use strict';
-
-module.exports = list => list[0];
-
-},{}],13:[function(require,module,exports){
-'use strict';
-
-module.exports = list => Array.isArray(list);
-
-},{}],14:[function(require,module,exports){
-'use strict';
-
-let is = require('is');
-
-module.exports = fn =>
-    is('function', fn);
-
-},{"is":16}],15:[function(require,module,exports){
-'use strict';
-
-let is = require('is');
-
-module.exports = str =>
-    is('string', str);
-},{"is":16}],16:[function(require,module,exports){
-'use strict';
-
-module.exports = (type, value) => typeof value === type;
-},{}],17:[function(require,module,exports){
-'use strict';
-
-let slice   = require('./slice');
-let head    = require('./head');
-
-module.exports = list => head(slice(list, -1));
-
-},{"./head":12,"./slice":21}],18:[function(require,module,exports){
-'use strict';
-
-let calc = require('./calc');
-
-module.exports = calc((a, b) => a * b);
-
-},{"./calc":9}],19:[function(require,module,exports){
-'use strict';
-
-module.exports = (x) => {
+function print(x) {
     console.log(x);
     return x;
-};
+}
 
-},{}],20:[function(require,module,exports){
-'use strict';
+function last(list) {
+    return head(slice(list, -1));
+}
 
-module.exports = (fn, array) => 
-    [].reduce.call(array, fn);
+function head(list) {
+    return list[0];
+}
 
-},{}],21:[function(require,module,exports){
-'use strict';
+function tail(list) {
+    return slice(list, 1);
+}
 
-module.exports = (array, from, to) => 
-    [].slice.call(array, from, to);
+function calc(operation) {
+    return function() {
+        return [].reduce.call(arguments, operation);
+    };
+}
 
-},{}],22:[function(require,module,exports){
-'use strict';
+function slice(array, from, to) {
+    return [].slice.call(array, from, to);
+}
 
-let calc = require('./calc');
-
-module.exports = calc((a, b) => a - b);
-
-},{"./calc":9}],23:[function(require,module,exports){
-'use strict';
-
-let calc = require('./calc');
-
-module.exports = calc((a, b) => a + b);
-
-},{"./calc":9}],24:[function(require,module,exports){
-'use strict';
-
-let slice = require('./slice');
-
-module.exports = list => slice(list, 1);
-
-},{"./slice":21}],25:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 'use strict';
 
 let categorize = require('./categorize');
@@ -453,12 +386,12 @@ function check(input) {
         throw Error('input should be an array!');
 }
 
-},{"./categorize":4}],26:[function(require,module,exports){
+},{"./categorize":4}],11:[function(require,module,exports){
 'use strict';
 
 let apart       = require('apart');
-let isString    = require('is-string');
 
+let isString    = str => typeof str === 'string';
 let addSpaces   = (a) => ` ${ a } `;
 
 module.exports = tokenize;
@@ -514,18 +447,17 @@ function generateStr(expression) {
     return str;
 }
 
-},{"apart":1,"is-string":15}],"lisp":[function(require,module,exports){
+},{"apart":1}],"lisp":[function(require,module,exports){
 'use strict';
 
 let squad           = require('squad');
+let apart           = require('apart');
 
 let interpret       = require('./interpret');
 let parenthesize    = require('./parenthesize');
 let tokenize        = require('./tokenize');
 let bracketsCheck   = require('./brackets-check');
-
-let apart           = require('apart');
-let check           = require('check');
+let check           = require('./check');
 
 let checkString     = apart(check, 'string');
 let checkExpression = apart(checkString, 'expression');
@@ -540,5 +472,5 @@ let lisp            = squad(
 
 module.exports      = lisp;
 
-},{"./brackets-check":3,"./interpret":7,"./parenthesize":25,"./tokenize":26,"apart":1,"check":10,"squad":2}]},{},["lisp"])("lisp")
+},{"./brackets-check":3,"./check":5,"./interpret":8,"./parenthesize":10,"./tokenize":11,"apart":1,"squad":2}]},{},["lisp"])("lisp")
 });
