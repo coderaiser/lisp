@@ -8,7 +8,7 @@ let Context     = require('./context');
 
 let head        = require('head');
 let tail        = require('tail');
-let isFunction  = require('is-function');
+let isFunction  = fn => typeof fn === 'function';
 
 let special = {
     let: function(input, context) {
