@@ -235,6 +235,8 @@ module.exports = {
     head: head,
     tail: tail,
     last: last,
+    car: head,
+    cdr: tail,
     '+': calc(function (a, b) {
         return a + b;
     }),
