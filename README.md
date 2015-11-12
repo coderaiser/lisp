@@ -25,11 +25,11 @@ lisp ('(+ 5 (* 2 2) (/ 4 2))');
 // returns
 11
 
-lisp( '(head \'(1 2 3 4));
+lisp('(head \'(1 2 3 4)');
 // returns
 1
 
-lisp( '(tail \'(1 2 3 4));
+lisp('(tail \'(1 2 3 4)');
 // returns
 [2, 3, 4]
 
