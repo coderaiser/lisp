@@ -1,59 +1,29 @@
 'use strict';
 
-let apart       = require('apart');
-
 let isString    = str => typeof str === 'string';
-let addSpaces   = (a) => ` ${ a } `;
 
 module.exports = tokenize;
+
+let regexp  = /^\s*((\r|\n|$)|#;|#\||#\\[^\w]|#?(\(|\[|{)|\)|\]|}|\'|`|,@|,|\+inf\.0|-inf\.0|\+nan\.0|\"(\\(.|$)|[^\"\\])*(\"|$)|[^\s()\[\]{}]+)/;
 
 function tokenize(expression) {
     check(expression);
     
-    let marker          = generateStr(expression);
+    let tokens  = [];
+    let txt     = expression;
+    let add     = (array, token) => {
+        tokens.push(token);
+        
+        return '';
+    };
     
-    return expression
-        .split('"')
-        .map(apart(spacesInQuotes, addSpaces, marker))
-        .join('"')
-        .split(' ')
-        .filter(Boolean)
-        .map(x =>
-            x.replace(RegExp(marker, 'g'), ' ')
-        );
-}
-
-function spacesInQuotes(strProcess, marker, x, i) {
-    return i % 2 === 0 ?
-        notInString(strProcess, x)
-        :
-        inString(marker, x);
-}
-
-function inString(marker, x) {
-    return x.replace(/ /g, marker);
-}
-
-function notInString(strProcess, x) {
-    let str =  x.replace(/\(|\)/g, strProcess);
+    while(txt)
+        txt = txt.replace(regexp, add);
     
-    return str;
+    return tokens;
 }
 
 function check(str) {
     if (!isString(str))
         throw Error('expression should be string!');
-}
-
-let uniq            = (expression, str) => ~expression.indexOf(str);
-let generateRandom  = () => `>---${ Math.random() }---<`;
-
-function generateStr(expression) {
-    let str;
-    
-    do 
-        str = generateRandom();
-    while (uniq(expression, str));
-    
-    return str;
 }
