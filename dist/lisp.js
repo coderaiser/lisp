@@ -51,31 +51,36 @@ function incMonad() {
 
 module.exports = categorize;
 
-var apart = require('apart');
-
-var check = require('./check');
 var library = require('./library');
 
 var head = library.head;
 var last = library.last;
 
-var checkString = apart(check, 'string');
-var checkInput = apart(checkString, 'input');
+var isString = function isString(value) {
+    return typeof value === 'string';
+};
+var isArray = Array.isArray;
+var isType = function isType(value) {
+    return isString(value) || isArray(value);
+};
+var check = function check(value) {
+    if (!isType(value)) throw Error('input should be string or array!');
+};
 
 function categorize(input) {
-    checkInput(input);
-
+    check(input);
     var result = undefined;
-    var num = Number(input);
 
-    if (!isNaN(num)) result = {
+    if (!isNaN(input)) result = {
         type: 'literal',
-        value: num
-    };else if (wrapedByQuotes(input)) {
-        result = {
-            type: 'literal',
-            value: input.slice(1, -1) };
-    } else result = {
+        value: Number(input)
+    };else if (Array.isArray(input)) result = {
+        type: 'literal',
+        value: input.map(parseInput)
+    };else if (wrapedByQuotes(input)) result = {
+        type: 'literal',
+        value: unwrap(input)
+    };else result = {
         type: 'identifier',
         value: input
     };
@@ -83,10 +88,18 @@ function categorize(input) {
     return result;
 }
 
+function parseInput(value) {
+    if (wrapedByQuotes(value)) return unwrap(value);else if (!isNaN(value)) return Number(value);else return value;
+}
+
+function unwrap(input) {
+    return input.slice(1, -1);
+}
+
 function wrapedByQuotes(value) {
     return head(value) === '"' && last(value) === '"';
 }
-},{"./check":3,"./library":7,"apart":10}],3:[function(require,module,exports){
+},{"./library":7}],3:[function(require,module,exports){
 'use strict';
 
 function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
@@ -265,7 +278,10 @@ function slice(array, from, to) {
 },{}],8:[function(require,module,exports){
 'use strict';
 
+var squad = require('squad');
+
 var categorize = require('./categorize');
+var getList = squad(categorize, makeList);
 
 module.exports = parenthesize;
 
@@ -281,6 +297,10 @@ function parenthesize(input, list) {
 
         if (!token) {
             return list.pop();
+        } else if (isList(token, input)) {
+            list.push(getList(input));
+            cutList(input);
+            return list;
         } else if (token === '(') {
             list.push(parenthesize(input, []));
             return parenthesize(input, list);
@@ -295,7 +315,23 @@ function parenthesize(input, list) {
 function check(input) {
     if (!Array.isArray(input)) throw Error('input should be an array!');
 }
-},{"./categorize":2}],9:[function(require,module,exports){
+
+function isList(token, input) {
+    return token === '\'' && input[0] === '(';
+}
+
+function makeList(input) {
+    var closeIndex = input.indexOf(')');
+
+    return input.slice(1, closeIndex);
+}
+
+function cutList(input) {
+    var closeIndex = input.indexOf(')');
+
+    input.splice(0, closeIndex + 2);
+}
+},{"./categorize":2,"squad":11}],9:[function(require,module,exports){
 'use strict';
 
 var isString = function isString(str) {

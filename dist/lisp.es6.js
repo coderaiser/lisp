@@ -138,33 +138,39 @@ function incMonad() {
 
 module.exports = categorize;
 
-let apart       = require('apart');
-
-let check       = require('./check');
 let library     = require('./library');
 
 let head        = library.head;
 let last        = library.last;
 
-let checkString = apart(check, 'string');
-let checkInput  = apart(checkString, 'input');
+let isString    = value => typeof value === 'string';
+let isArray     = Array.isArray;
+let isType      = value => isString(value) || isArray(value);
+let check       = value => {
+    if (!isType(value))
+        throw Error('input should be string or array!');
+};
 
 function categorize(input) {
-    checkInput(input);
-    
+    check(input);
     let result;
-    let num = Number(input);
     
-    if (!isNaN(num))
+    if (!isNaN(input))
         result = {
             type: 'literal',
-            value: num
+            value: Number(input)
         };
-    else if (wrapedByQuotes(input)) {
+    else if (Array.isArray(input))
         result = {
             type: 'literal',
-            value: input.slice(1, -1) };
-    } else
+            value: input.map(parseInput)
+        };
+    else if (wrapedByQuotes(input))
+        result = {
+            type: 'literal',
+            value: unwrap(input)
+        };
+    else
         result =  {
             type: 'identifier',
             value: input
@@ -172,13 +178,26 @@ function categorize(input) {
     
     return result;
  }
- 
+
+function parseInput(value) {
+    if (wrapedByQuotes(value))
+        return unwrap(value);
+    else if (!isNaN(value))
+        return Number(value);
+    else
+        return value;
+}
+
+function unwrap(input) {
+    return input.slice(1, -1);
+}
+
 function wrapedByQuotes(value) {
     return  head(value) === '"' &&
             last(value) === '"';
 }
 
-},{"./check":5,"./library":9,"apart":1}],5:[function(require,module,exports){
+},{"./library":9}],5:[function(require,module,exports){
 'use strict';
 
 let is = (type, value) => typeof value === type;
@@ -353,7 +372,10 @@ function slice(array, from, to) {
 },{}],10:[function(require,module,exports){
 'use strict';
 
-let categorize = require('./categorize');
+let squad       = require('squad');
+
+let categorize  = require('./categorize');
+let getList     = squad(categorize, makeList);
 
 module.exports = parenthesize;
 
@@ -369,6 +391,10 @@ function parenthesize(input, list) {
         
         if (!token) {
             return list.pop();
+        } else if (isList(token, input)) {
+            list.push(getList(input));
+            cutList(input);
+            return list;
         } else if (token === '(') {
             list.push(parenthesize(input, []));
             return parenthesize(input, list);
@@ -385,7 +411,23 @@ function check(input) {
         throw Error('input should be an array!');
 }
 
-},{"./categorize":4}],11:[function(require,module,exports){
+function isList(token, input) {
+    return token === '\'' && input[0] === '(';
+}
+
+function makeList(input) {
+    let closeIndex = input.indexOf(')');
+    
+    return input.slice(1, closeIndex);
+}
+
+function cutList(input) {
+    let closeIndex = input.indexOf(')');
+    
+    input.splice(0, closeIndex + 2);
+}
+
+},{"./categorize":4,"squad":2}],11:[function(require,module,exports){
 'use strict';
 
 let isString    = str => typeof str === 'string';
