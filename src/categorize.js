@@ -2,33 +2,39 @@
 
 module.exports = categorize;
 
-let apart       = require('apart');
-
-let check       = require('./check');
 let library     = require('./library');
 
 let head        = library.head;
 let last        = library.last;
 
-let checkString = apart(check, 'string');
-let checkInput  = apart(checkString, 'input');
+let isString    = value => typeof value === 'string';
+let isArray     = Array.isArray;
+let isType      = value => isString(value) || isArray(value);
+let check       = value => {
+    if (!isType(value))
+        throw Error('input should be string or array!');
+};
 
 function categorize(input) {
-    checkInput(input);
-    
+    check(input);
     let result;
-    let num = Number(input);
     
-    if (!isNaN(num))
+    if (!isNaN(input))
         result = {
             type: 'literal',
-            value: num
+            value: Number(input)
         };
-    else if (wrapedByQuotes(input)) {
+    else if (Array.isArray(input))
         result = {
             type: 'literal',
-            value: input.slice(1, -1) };
-    } else
+            value: input.map(parseInput)
+        };
+    else if (wrapedByQuotes(input))
+        result = {
+            type: 'literal',
+            value: unwrap(input)
+        };
+    else
         result =  {
             type: 'identifier',
             value: input
@@ -36,7 +42,20 @@ function categorize(input) {
     
     return result;
  }
- 
+
+function parseInput(value) {
+    if (wrapedByQuotes(value))
+        return unwrap(value);
+    else if (!isNaN(value))
+        return Number(value);
+    else
+        return value;
+}
+
+function unwrap(input) {
+    return input.slice(1, -1);
+}
+
 function wrapedByQuotes(value) {
     return  head(value) === '"' &&
             last(value) === '"';

@@ -28,7 +28,7 @@
     });
     
     test('tokenize: wrong type', t => {
-        t.throws(categorize, /input should be string!/, 'should throw when no input');
+        t.throws(categorize, /input should be string or array!/, 'should throw when input not string, not array');
         t.end();
     });
 })();

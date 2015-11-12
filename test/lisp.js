@@ -60,6 +60,22 @@
         t.end();
     });
     
+    test('expression: head', t => {
+        const expr = '(head \'(1 2 3 4))';
+        let result = lisp(expr);
+        
+        t.equal(result, 1, 'head');
+        t.end();
+    });
+    
+    test('expression: tail', t => {
+        const expr = '(tail \'(1 2 3 4))';
+        let result = lisp(expr);
+        
+        t.deepEqual(result, [2, 3, 4], 'head');
+        t.end();
+    });
+    
     test('error in expression: not a function', t => {
         let fn  = () => lisp('(+1 2 3 4)');
         
