@@ -5,6 +5,8 @@ module.exports = {
     head    : head,
     tail    : tail,
     last    : last,
+    car     : head,
+    cdr     : tail,
     '+'     : calc((a, b) => a + b),
     '-'     : calc((a, b) => a - b),
     '*'     : calc((a, b) => a * b),

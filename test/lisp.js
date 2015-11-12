@@ -72,7 +72,23 @@
         const expr = '(tail \'(1 2 3 4))';
         let result = lisp(expr);
         
-        t.deepEqual(result, [2, 3, 4], 'head');
+        t.deepEqual(result, [2, 3, 4], 'tail');
+        t.end();
+    });
+    
+    test('expression: car', t => {
+        const expr = '(head \'(1 2 3 4))';
+        let result = lisp(expr);
+        
+        t.equal(result, 1, 'head');
+        t.end();
+    });
+    
+    test('expression: cdr', t => {
+        const expr = '(tail \'(1 2 3 4))';
+        let result = lisp(expr);
+        
+        t.deepEqual(result, [2, 3, 4], 'cdr');
         t.end();
     });
     
