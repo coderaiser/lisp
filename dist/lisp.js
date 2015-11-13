@@ -4,12 +4,12 @@
 function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
 
 var squad = require('squad');
-var apart = require('apart');
+var currify = require('currify');
 
 var is = function is(type, value) {
     return (typeof value === 'undefined' ? 'undefined' : _typeof(value)) === type;
 };
-var isUndefined = apart(is, 'undefined');
+var isUndefined = currify(is, 'undefined');
 
 module.exports = function (tokens) {
     var openCount = incMonad();
@@ -46,7 +46,7 @@ function incMonad() {
         }
     };
 }
-},{"apart":10,"squad":11}],2:[function(require,module,exports){
+},{"currify":10,"squad":11}],2:[function(require,module,exports){
 'use strict';
 
 module.exports = categorize;
@@ -368,26 +368,20 @@ function check(str) {
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i]; return arr2; } else { return Array.from(arr); } }
 
+module.exports = currify;
+
 var tail = function tail(list) {
-    return slice(list, 1);
+    return [].slice.call(list, 1);
 };
 
-module.exports = apart;
-
-function apart(fn) {
+function currify(fn) {
     check(fn);
 
-    var first = tail(arguments);
+    var args = tail(arguments);
 
-    return function () {
-        var args = [].concat(_toConsumableArray(first), Array.prototype.slice.call(arguments));
-
-        return fn.apply(undefined, _toConsumableArray(args));
+    if (args.length >= fn.length) return fn.apply(undefined, _toConsumableArray(args));else return function () {
+        return currify.apply(undefined, [fn].concat(_toConsumableArray(args), Array.prototype.slice.call(arguments)));
     };
-}
-
-function slice(list, from, to) {
-    return [].slice.call(list, from, to);
 }
 
 function check(fn) {
@@ -455,7 +449,7 @@ function check(fn) {
 'use strict';
 
 var squad = require('squad');
-var apart = require('apart');
+var currify = require('currify');
 
 var interpret = require('./interpret');
 var parenthesize = require('./parenthesize');
@@ -463,11 +457,11 @@ var tokenize = require('./tokenize');
 var bracketsCheck = require('./brackets-check');
 var check = require('./check');
 
-var checkString = apart(check, 'string');
-var checkExpression = apart(checkString, 'expression');
+var checkString = currify(check, 'string');
+var checkExpression = checkString('expression');
 
 var lisp = squad(interpret, parenthesize, bracketsCheck, tokenize, checkExpression);
 
 module.exports = lisp;
-},{"./brackets-check":1,"./check":3,"./interpret":6,"./parenthesize":8,"./tokenize":9,"apart":10,"squad":11}]},{},["lisp"])("lisp")
+},{"./brackets-check":1,"./check":3,"./interpret":6,"./parenthesize":8,"./tokenize":9,"currify":10,"squad":11}]},{},["lisp"])("lisp")
 });

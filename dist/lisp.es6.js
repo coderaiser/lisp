@@ -3,26 +3,20 @@
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i]; return arr2; } else { return Array.from(arr); } }
 
+module.exports = currify;
+
 var tail = function tail(list) {
-    return slice(list, 1);
+    return [].slice.call(list, 1);
 };
 
-module.exports = apart;
-
-function apart(fn) {
+function currify(fn) {
     check(fn);
 
-    var first = tail(arguments);
+    var args = tail(arguments);
 
-    return function () {
-        var args = [].concat(_toConsumableArray(first), Array.prototype.slice.call(arguments));
-
-        return fn.apply(undefined, _toConsumableArray(args));
+    if (args.length >= fn.length) return fn.apply(undefined, _toConsumableArray(args));else return function () {
+        return currify.apply(undefined, [fn].concat(_toConsumableArray(args), Array.prototype.slice.call(arguments)));
     };
-}
-
-function slice(list, from, to) {
-    return [].slice.call(list, from, to);
 }
 
 function check(fn) {
@@ -90,10 +84,10 @@ function check(fn) {
 'use strict';
 
 let squad       = require('squad');
-let apart       = require('apart');
+let currify     = require('currify');
 
 let is          = (type, value) => typeof value === type;
-let isUndefined = apart(is, 'undefined');
+let isUndefined = currify(is, 'undefined');
 
 module.exports  = tokens => {
     let openCount   = incMonad();
@@ -133,7 +127,7 @@ function incMonad() {
     };
 }
 
-},{"apart":1,"squad":2}],4:[function(require,module,exports){
+},{"currify":1,"squad":2}],4:[function(require,module,exports){
 'use strict';
 
 module.exports = categorize;
@@ -464,7 +458,7 @@ function check(str) {
 'use strict';
 
 let squad           = require('squad');
-let apart           = require('apart');
+let currify           = require('currify');
 
 let interpret       = require('./interpret');
 let parenthesize    = require('./parenthesize');
@@ -472,8 +466,8 @@ let tokenize        = require('./tokenize');
 let bracketsCheck   = require('./brackets-check');
 let check           = require('./check');
 
-let checkString     = apart(check, 'string');
-let checkExpression = apart(checkString, 'expression');
+let checkString     = currify(check, 'string');
+let checkExpression = checkString( 'expression');
 
 let lisp            = squad(
     interpret,
@@ -485,5 +479,5 @@ let lisp            = squad(
 
 module.exports      = lisp;
 
-},{"./brackets-check":3,"./check":5,"./interpret":8,"./parenthesize":10,"./tokenize":11,"apart":1,"squad":2}]},{},["lisp"])("lisp")
+},{"./brackets-check":3,"./check":5,"./interpret":8,"./parenthesize":10,"./tokenize":11,"currify":1,"squad":2}]},{},["lisp"])("lisp")
 });
