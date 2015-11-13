@@ -41,7 +41,7 @@
     "tape": "^4.2.0"
   },
   "dependencies": {
-    "apart": "~1.0.0",
+    "currify": "~1.0.0",
     "squad": "~1.1.1"
   }
 }

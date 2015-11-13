@@ -1,10 +1,10 @@
 'use strict';
 
 let squad       = require('squad');
-let apart       = require('apart');
+let currify     = require('currify');
 
 let is          = (type, value) => typeof value === type;
-let isUndefined = apart(is, 'undefined');
+let isUndefined = currify(is, 'undefined');
 
 module.exports  = tokens => {
     let openCount   = incMonad();
