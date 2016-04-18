@@ -19,7 +19,7 @@ module.exports  = tokens => {
     return tokens;
 };
 
-let ifCondition = (fn, ideal) => 
+let ifCondition = (fn, ideal) =>
     value =>
         value !== ideal ?
             value
