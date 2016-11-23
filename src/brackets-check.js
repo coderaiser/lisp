@@ -1,7 +1,7 @@
 'use strict';
 
 let squad       = require('squad');
-let currify     = require('currify');
+let currify     = require('currify/legacy');
 
 let is          = (type, value) => typeof value === type;
 let isUndefined = currify(is, 'undefined');

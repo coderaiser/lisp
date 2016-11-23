@@ -1,7 +1,7 @@
 'use strict';
 
 let squad           = require('squad');
-let currify         = require('currify');
+let currify         = require('currify/legacy');
 
 let interpret       = require('./interpret');
 let parenthesize    = require('./parenthesize');
