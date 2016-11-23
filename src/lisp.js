@@ -1,18 +1,18 @@
 'use strict';
 
-let squad           = require('squad');
-let currify         = require('currify/legacy');
+const squad = require('squad');
+const currify = require('currify/legacy');
 
-let interpret       = require('./interpret');
-let parenthesize    = require('./parenthesize');
-let tokenize        = require('./tokenize');
-let bracketsCheck   = require('./brackets-check');
-let check           = require('./check');
+const interpret = require('./interpret');
+const parenthesize = require('./parenthesize');
+const tokenize = require('./tokenize');
+const bracketsCheck = require('./brackets-check');
+const check = require('./check');
 
-let checkString     = currify(check, 'string');
-let checkExpression = checkString('expression');
+const checkString = currify(check, 'string');
+const checkExpression = checkString('expression');
 
-let lisp            = squad(
+const lisp = squad(
     interpret,
     parenthesize,
     bracketsCheck,
@@ -20,4 +20,4 @@ let lisp            = squad(
     checkExpression
 );
 
-module.exports      = lisp;
+module.exports = lisp;
