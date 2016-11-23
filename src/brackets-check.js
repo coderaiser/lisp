@@ -1,17 +1,17 @@
 'use strict';
 
-let squad       = require('squad');
-let currify     = require('currify/legacy');
+const squad = require('squad');
+const currify = require('currify/legacy');
 
-let is          = (type, value) => typeof value === type;
-let isUndefined = currify(is, 'undefined');
+const is = (type, value) => typeof value === type;
+const isUndefined = currify(is, 'undefined');
 
-module.exports  = tokens => {
-    let openCount   = incMonad();
-    let closeCount  = incMonad();
+module.exports = tokens => {
+    const openCount = incMonad();
+    const closeCount = incMonad();
     
-    let ifOpen      = ifCondition(openCount, '(');
-    let ifClose     = ifCondition(closeCount, ')');
+    const ifOpen = ifCondition(openCount, '(');
+    const ifClose = ifCondition(closeCount, ')');
     
     tokens.forEach(squad(ifOpen, ifClose));
     checkMonads(openCount, closeCount);
@@ -19,14 +19,14 @@ module.exports  = tokens => {
     return tokens;
 };
 
-let ifCondition = (fn, ideal) =>
+const ifCondition = (fn, ideal) =>
     value =>
         value !== ideal ?
             value
             :
             fn(value);
 
-let checkMonads         = (f, g) => {
+const checkMonads = (f, g) => {
     if (f() !== g())
         throw Error(`different count of parentheses: open ${ f() }, close ${ g() }`);
 };
@@ -35,11 +35,11 @@ function incMonad() {
     let i = 0;
     
     return value => {
-        if (isUndefined(value)) {
+        if (isUndefined(value))
             return i;
-        } else {
-            i++;
-            return value;
-        }
+            
+        i++;
+        return value;
     };
 }
+
