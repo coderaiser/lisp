@@ -11,7 +11,7 @@ npm i lisp --save
 ## How to use?
 
 ```js
-let lisp = require('lisp');
+const lisp = require('lisp');
 
 lisp('(+ 1 2 3 4');
 // returns
