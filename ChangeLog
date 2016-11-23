@@ -1,3 +1,13 @@
+2016.11.23, v0.5.3
+
+feature:
+- (package) currify v2.0.0
+- (package) redrun v5.0.0
+- (package) redrun v4.0.0
+- (package) npm-run-all -> redrun
+- (package) jscs v3.0.3
+
+
 2015.11.13, v0.5.2
 
 feature:
