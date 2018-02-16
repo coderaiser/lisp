@@ -1,3 +1,13 @@
+2018.02.16, v0.5.4
+
+fix:
+- (package) browserify
+
+feature:
+- (package) squad v2.0.0
+- (package) babel-preset-env
+
+
 2016.11.23, v0.5.3
 
 feature:

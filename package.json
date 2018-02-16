@@ -1,6 +1,6 @@
 {
   "name": "lisp",
-  "version": "0.5.3",
+  "version": "0.5.4",
   "description": "simplest lisp implementation",
   "main": "lib/lisp.js",
   "scripts": {
