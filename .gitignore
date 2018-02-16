@@ -1,5 +1,8 @@
 node_modules
 npm-debug.log
 !src/node_modules
+.nyc_output
+yarn.lock
 
 dist/lisp.debug.js
+

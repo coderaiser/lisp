@@ -2,54 +2,55 @@
 
 module.exports = categorize;
 
-let library     = require('./library');
+const library = require('./library');
 
-let head        = library.head;
-let last        = library.last;
+const head = library.head;
+const last = library.last;
 
-let isString    = value => typeof value === 'string';
-let isArray     = Array.isArray;
-let isType      = value => isString(value) || isArray(value);
-let check       = value => {
+const isString = value => typeof value === 'string';
+const isArray = Array.isArray;
+const isType = (value) => isString(value) || isArray(value);
+
+const check = (value) => {
     if (!isType(value))
         throw Error('input should be string or array!');
 };
 
 function categorize(input) {
     check(input);
-    let result;
     
     if (!isNaN(input))
-        result = {
+        return {
             type: 'literal',
             value: Number(input)
         };
-    else if (Array.isArray(input))
-        result = {
+    
+    if (Array.isArray(input))
+        return {
             type: 'literal',
-            value: input.map(parseInput)
-        };
-    else if (wrapedByQuotes(input))
-        result = {
-            type: 'literal',
-            value: unwrap(input)
-        };
-    else
-        result =  {
-            type: 'identifier',
-            value: input
+            value: input.map(parseInput),
         };
     
-    return result;
+    if (wrapedByQuotes(input))
+        return {
+            type: 'literal',
+            value: unwrap(input),
+        };
+        
+    return {
+        type: 'identifier',
+        value: input,
+    };
  }
 
 function parseInput(value) {
     if (wrapedByQuotes(value))
         return unwrap(value);
-    else if (!isNaN(value))
+    
+    if (!isNaN(value))
         return Number(value);
-    else
-        return value;
+    
+    return value;
 }
 
 function unwrap(input) {

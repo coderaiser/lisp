@@ -1,37 +1,37 @@
 'use strict';
 
-let squad       = require('squad');
-
-let categorize  = require('./categorize');
-let getList     = squad(categorize, makeList);
+const squad = require('squad/legacy');
+const categorize = require('./categorize');
+const getList = squad(categorize, makeList);
 
 module.exports = parenthesize;
 
 function parenthesize(input, list) {
     check(input);
     
-    var token;
-    
-    if (!list) {
+    if (!list)
         return parenthesize(input, []);
-    } else {
-        token = input.shift();
-        
-        if (!token) {
-            return list.pop();
-        } else if (isList(token, input)) {
-            list.push(getList(input));
-            cutList(input);
-            return list;
-        } else if (token === '(') {
-            list.push(parenthesize(input, []));
-            return parenthesize(input, list);
-        } else if (token === ')') {
-            return list;
-        } else {
-            return parenthesize(input, list.concat(categorize(token)));
-        }
+    
+    const token = input.shift();
+    
+    if (!token)
+        return list.pop();
+    
+    if (isList(token, input)) {
+        list.push(getList(input));
+        cutList(input);
+        return list;
     }
+    
+    if (token === '(') {
+        list.push(parenthesize(input, []));
+        return parenthesize(input, list);
+    }
+    
+    if (token === ')')
+        return list;
+    
+    return parenthesize(input, list.concat(categorize(token)));
 }
 
 function check(input) {
@@ -44,13 +44,14 @@ function isList(token, input) {
 }
 
 function makeList(input) {
-    let closeIndex = input.indexOf(')');
+    const closeIndex = input.indexOf(')');
     
     return input.slice(1, closeIndex);
 }
 
 function cutList(input) {
-    let closeIndex = input.indexOf(')');
+    const closeIndex = input.indexOf(')');
     
     input.splice(0, closeIndex + 2);
 }
+

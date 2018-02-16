@@ -5,6 +5,7 @@
   "main": "lib/lisp.js",
   "scripts": {
     "test": "tape test/*.js",
+    "coverage": "nyc npm test",
     "bundle:base": "browserify -s lisp --ng false",
     "bundle": "npm run bundle:base -- -r ./lib/lisp.js:lisp ./lib/lisp.js -o dist/lisp.js",
     "bundle:es6:base": "npm run bundle:base -- -r ./src/lisp.js:lisp ./src/lisp.js",
@@ -37,12 +38,13 @@
     "babel-cli": "^6.1.1",
     "babel-preset-env": "^1.6.1",
     "jscs": "^3.0.3",
+    "nyc": "^11.4.1",
     "redrun": "^5.0.1",
     "rimraf": "^2.4.3",
     "tape": "^4.2.0"
   },
   "dependencies": {
     "currify": "^2.0.0",
-    "squad": "~1.1.1"
+    "squad": "^2.0.0"
   }
 }
