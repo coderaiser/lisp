@@ -37,6 +37,7 @@
   "devDependencies": {
     "babel-cli": "^6.1.1",
     "babel-preset-env": "^1.6.1",
+    "browserify": "^16.1.0",
     "jscs": "^3.0.3",
     "nyc": "^11.4.1",
     "redrun": "^5.0.1",
