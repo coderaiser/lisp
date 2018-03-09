@@ -5,7 +5,7 @@ Simple lisp implementation. Could be used in browser as global `lisp`, `node.js`
 ## Install
 
 ```
-npm i lisp --save
+npm i lisp
 ```
 
 ## How to use?
@@ -33,6 +33,14 @@ lisp('(tail \'(1 2 3 4)');
 // returns
 [2, 3, 4]
 
+```
+
+## Environments
+
+In old `node.js` environments that supports `es5` only, `lisp` could be used with:
+
+```js
+var lisp = require('lisp/legacy');
 ```
 
 ## License

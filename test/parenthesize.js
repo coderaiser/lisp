@@ -1,31 +1,29 @@
-(function() {
-    'use strict';
+'use strict';
+
+const parenthesize = require('../lib/parenthesize');
+const test = require('tape');
+
+test('parenthesize: expression', t => {
+    const tokens = ['(', '+', '2', '2', ')'];
+    const result = parenthesize(tokens);
+    const RESULT = [{
+        type: 'identifier',
+            value: '+'
+        }, {
+            type: 'literal',
+            value: 2
+        }, {
+            type: 'literal',
+            value: 2
+        }];
     
-    let dir             = '../src/',
-        parenthesize    = require(dir + 'parenthesize'),
-        test            = require('tape');
+    t.deepEqual(result, RESULT);
     
-    test('parenthesize: expression', t => {
-        let tokens = ['(', '+', '2', '2', ')'];
-        let result = parenthesize(tokens);
-        let RESULT = [{
-            type: 'identifier',
-                value: '+'
-            }, {
-                type: 'literal',
-                value: 2
-            }, {
-                type: 'literal',
-                value: 2
-            }];
-        
-        t.deepEqual(result, RESULT);
-        
-        t.end();
-    });
-    
-    test('parenthesize: input not array', t => {
-        t.throws(parenthesize, /input should be an array!/, 'should throw when input not array');
-        t.end();
-    });
-})();
+    t.end();
+});
+
+test('parenthesize: input not array', t => {
+    t.throws(parenthesize, /input should be an array!/, 'should throw when input not array');
+    t.end();
+});
+
