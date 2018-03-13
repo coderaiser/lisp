@@ -1,3 +1,11 @@
+2018.03.13, v0.6.0
+
+feature:
+- (lexer) move out to directory
+- (lisp) drop bower support
+- (package) redrun v6.0.0
+
+
 2018.02.16, v0.5.4
 
 fix:
