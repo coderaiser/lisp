@@ -1,3 +1,9 @@
+2018.03.14, v0.6.1
+
+fix:
+- (lexer) rm column
+
+
 2018.03.13, v0.6.0
 
 feature:
