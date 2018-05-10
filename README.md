@@ -49,10 +49,10 @@ MIT
 
 [NPMIMGURL]:                https://img.shields.io/npm/v/lisp.svg?style=flat
 [BuildStatusIMGURL]:        https://img.shields.io/travis/coderaiser/lisp/master.svg?style=flat
-[DependencyStatusIMGURL]:   https://img.shields.io/gemnasium/coderaiser/lisp.svg?style=flat
+[DependencyStatusIMGURL]:   https://img.shields.io/david/coderaiser/lisp.svg?style=flat
 [LicenseIMGURL]:            https://img.shields.io/badge/license-MIT-317BF9.svg?style=flat
 [NPMURL]:                   https://npmjs.org/package/lisp "npm"
 [BuildStatusURL]:           https://travis-ci.org/coderaiser/lisp  "Build Status"
-[DependencyStatusURL]:      https://gemnasium.com/coderaiser/lisp "Dependency Status"
+[DependencyStatusURL]:      https://david-dm.org/coderaiser/lisp "Dependency Status"
 [LicenseURL]:               https://tldrlegal.com/license/mit-license "MIT License"
 
