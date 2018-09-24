@@ -1,3 +1,16 @@
+2018.09.24, v0.6.2
+
+fix:
+- (lisp) rm ","
+
+feature:
+- (package) nyc v13.0.1
+- (package) squad v3.0.0
+- (package) eslint v5.0.0
+- (package) sinon v6.0.0
+- (package) sinon v5.0.3
+
+
 2018.03.14, v0.6.1
 
 fix:
