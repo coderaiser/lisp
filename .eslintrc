@@ -4,11 +4,11 @@
         "node": true
     },
     "parserOptions": {
-        "ecmaVersion": 2017,
-        "sourceType": "module"
+        "ecmaVersion": 2018,
     },
     "rules": {
-        "indent": ["error", 4]
+        "indent": ["error", 4],
+        "no-console": 0
     },
     "extends": [
         "eslint:recommended",
