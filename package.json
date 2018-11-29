@@ -1,6 +1,6 @@
 {
   "name": "lisp",
-  "version": "0.6.2",
+  "version": "0.6.3",
   "description": "simplest lisp implementation",
   "main": "lib/lisp.js",
   "scripts": {
@@ -41,5 +41,8 @@
   "dependencies": {
     "currify": "^3.0.0",
     "squad": "^3.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

@@ -1,3 +1,11 @@
+2018.11.29, v0.6.3
+
+feature:
+- (package) redrun v7.0.3
+- (package) currify v3.0.0
+- (package) sinon, sinon-called-with-diff -> @cloudcmd/stub
+
+
 2018.09.24, v0.6.2
 
 fix:
