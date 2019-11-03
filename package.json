@@ -11,6 +11,7 @@
     "legacy": "madrun legacy",
     "wisdom": "madrun wisdom",
     "lint": "madrun lint",
+    "fix:lint": "madrun fix:lint",
     "clean": "madrun clean"
   },
   "repository": {

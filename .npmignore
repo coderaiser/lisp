@@ -2,3 +2,7 @@
 yarn.lock
 *.spec.js
 
+madrun.js
+
+.madrun.js
+

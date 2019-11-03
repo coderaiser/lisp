@@ -1,0 +1,8 @@
+{
+    "rules": {
+        "apply-destructuring": "off",
+        "remove-console": ["on", {
+            "exclude": "console.log(x)"
+        }]
+    }
+}
