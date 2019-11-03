@@ -4,14 +4,14 @@
   "description": "simplest lisp implementation",
   "main": "lib/lisp.js",
   "scripts": {
-    "test": "tape 'lib/**/*.spec.js'",
-    "coverage": "nyc npm test",
-    "build": "redrun clean 6to5 legacy",
-    "6to5": "babel lib -d legacy",
-    "legacy": "echo \"module.exports = require('./lisp');\" > legacy/index.js",
-    "wisdom": "npm run build",
-    "lint": "eslint lib",
-    "clean": "rimraf legacy"
+    "test": "madrun test",
+    "coverage": "madrun coverage",
+    "build": "madrun build",
+    "6to5": "madrun 6to5",
+    "legacy": "madrun legacy",
+    "wisdom": "madrun wisdom",
+    "lint": "madrun lint",
+    "clean": "madrun clean"
   },
   "repository": {
     "type": "git",
@@ -33,9 +33,14 @@
     "babel-cli": "^6.1.1",
     "babel-preset-env": "^1.6.1",
     "eslint": "^5.0.0",
-    "nyc": "^13.0.1",
+    "eslint-plugin-node": "^10.0.0",
+    "eslint-plugin-putout": "^2.0.1",
+    "madrun": "^4.1.4",
+    "nyc": "^14.1.1",
+    "putout": "^6.20.0",
     "redrun": "^7.0.3",
     "rimraf": "^2.4.3",
+    "supertape": "^1.2.3",
     "tape": "^4.2.0"
   },
   "dependencies": {
