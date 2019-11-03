@@ -6,13 +6,8 @@
   "scripts": {
     "test": "madrun test",
     "coverage": "madrun coverage",
-    "build": "madrun build",
-    "6to5": "madrun 6to5",
-    "legacy": "madrun legacy",
-    "wisdom": "madrun wisdom",
     "lint": "madrun lint",
-    "fix:lint": "madrun fix:lint",
-    "clean": "madrun clean"
+    "fix:lint": "madrun fix:lint"
   },
   "repository": {
     "type": "git",
@@ -31,8 +26,6 @@
   "homepage": "https://github.com/coderaiser/lisp",
   "devDependencies": {
     "@cloudcmd/stub": "^2.3.1",
-    "babel-cli": "^6.1.1",
-    "babel-preset-env": "^1.6.1",
     "eslint": "^6.6.0",
     "eslint-plugin-node": "^10.0.0",
     "eslint-plugin-putout": "^2.0.1",
@@ -40,9 +33,7 @@
     "nyc": "^14.1.1",
     "putout": "^6.20.0",
     "redrun": "^7.0.3",
-    "rimraf": "^3.0.0",
-    "supertape": "^1.2.3",
-    "tape": "^4.2.0"
+    "supertape": "^1.2.3"
   },
   "dependencies": {
     "currify": "^4.0.0",
@@ -50,5 +41,8 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "engines": {
+    "node": ">=8.3.0"
   }
 }

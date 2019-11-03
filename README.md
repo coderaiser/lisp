@@ -35,14 +35,6 @@ lisp('(tail \'(1 2 3 4)');
 
 ```
 
-## Environments
-
-In old `node.js` environments that supports `es5` only, `lisp` could be used with:
-
-```js
-var lisp = require('lisp/legacy');
-```
-
 ## License
 
 MIT
