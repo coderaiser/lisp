@@ -44,7 +44,7 @@
     "tape": "^4.2.0"
   },
   "dependencies": {
-    "currify": "^3.0.0",
+    "currify": "^4.0.0",
     "squad": "^3.0.0"
   },
   "publishConfig": {
